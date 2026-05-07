@@ -21,6 +21,7 @@ services:
             - "8080:8080"
         volumes:
             - ./user_images:/app/images
+            - ./logs:/app/logs
         environment:
             - ConnectionStrings__DefaultConnection=Host=db;Database=tourplanner_db;Username=user;Password=password
             - ASPNETCORE_ENVIRONMENT=Development

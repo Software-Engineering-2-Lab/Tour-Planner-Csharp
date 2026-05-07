@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\backend\\backend.csproj": {}
+    "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\TourPlanner\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\backend\\backend.csproj": {
+    "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\TourPlanner\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\TourPlanner\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\backend\\backend.csproj",
+        "projectPath": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\TourPlanner\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\arman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\backend\\obj\\",
+        "outputPath": "C:\\Users\\arman\\Documents\\SWEN2\\Tour-Planner-Csharp\\TourPlanner\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\arman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -49,6 +49,18 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.7, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[10.1.7, )"
             }
           },
           "imports": [
