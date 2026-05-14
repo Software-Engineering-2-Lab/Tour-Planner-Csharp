@@ -30,6 +30,8 @@ namespace TourPlanner.backend.Repositories
                 .ToListAsync();
         }
 
+        
+
         public async Task<Log?> GetByIdAsync(long id) 
         {
             return await _context.Logs.FindAsync(id);
@@ -49,10 +51,11 @@ namespace TourPlanner.backend.Repositories
             return log;
         }
 
-        public async Task DeleteAsync(Log log) 
+
+        public async Task DeleteAsync(Log log)
         {
-            _context.Logs.Remove(log); 
-            await _context.SaveChangesAsync();
-        }
+                _context.Logs.Remove(log); 
+                await _context.SaveChangesAsync();
+            }
     }
 }

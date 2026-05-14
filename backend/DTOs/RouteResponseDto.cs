@@ -7,8 +7,8 @@ public class RouteResponseDTO {
 
     public double Distance{get; set;}
     public double EstimatedTime{get; set;}
-    public string MapImageUrl{get; set;}
-    public string GeometryJson{get; set;}
+    public required string  MapImageUrl{get; set;}
+    public required string GeometryJson{get; set;}
    
 }
 }

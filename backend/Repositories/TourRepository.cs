@@ -49,5 +49,32 @@ namespace TourPlanner.backend.Repositories
                 .Distinct()
                 .ToListAsync();
         }
+
+        public async Task<Tour?> GetByIdAsync(long id) 
+        {
+            return await _context.Tours.FindAsync(id);
+        }
+
+        public async Task<Tour> AddAsync(Tour tour)
+        {
+            _context.Tours.Add(tour);
+            await _context.SaveChangesAsync();
+            return tour;
+        }
+
+        public async Task<Tour> UpdateAsync(Tour tour)
+        {
+            _context.Tours.Update(tour); 
+            await _context.SaveChangesAsync();
+            return tour;
+        }
+
+ 
+        public async Task DeleteAsync(Tour tour)
+        {
+                _context.Tours.Remove(tour); 
+                await _context.SaveChangesAsync();
+            }
     }
 }
+    

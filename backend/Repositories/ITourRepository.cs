@@ -11,8 +11,8 @@ namespace TourPlanner.backend.Repositories
         Task<List<Tour>> FindByUserIdAsync(long userId);
         Task<List<Tour>> FullTextSearchAsync(string query);
         Task<Tour> AddAsync(Tour tour);
-        Task<Tour> FindByIdAsync (Tour tour);
+        Task<Tour?> GetByIdAsync (long id);
         Task<Tour> UpdateAsync (Tour tour);
-        Task<Tour> DeleteAsync (Tour tour);
+        Task DeleteAsync (Tour tour);
     }
 }

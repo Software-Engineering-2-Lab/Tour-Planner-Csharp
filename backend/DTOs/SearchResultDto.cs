@@ -10,6 +10,6 @@ namespace TourPlanner.backend.DTOs
         
         public int TotalResults { get; set; }
         
-        public string SearchQuery { get; set; }
+        public string ?SearchQuery { get; set; }
     }
 }

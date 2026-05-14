@@ -9,9 +9,9 @@ namespace TourPlanner.backend.Repositories
         Task<List<Log>> FindByTourIdAsync(long tourId);
         Task<List<Log>> FindByTourAsync(Tour tour);
         Task<Log> AddAsync(Log log);
-        Task<Log?> GetByIdAsync (Log log);
+        Task<Log?> GetByIdAsync (long id);
         Task<Log> UpdateAsync (Log log);
-        Task<Log> DeleteAsync (Log log);
+        Task DeleteAsync (Log log);
         
         
 
