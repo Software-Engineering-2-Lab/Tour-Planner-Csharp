@@ -1,0 +1,62 @@
+<div class="modal-overlay">
+    <div class="modal-container">
+        <header class="modal-header">
+            <span class="title">{{ editTour ? 'EDIT TOUR' : 'ADD NEW TOUR' }}</span>
+            <button class="close-x" (click)="onCancel()">&#10006;</button>
+        </header>
+
+        <div class="modal-content">
+            <div class="form-group">
+                <label>TOUR NAME *</label>
+                <input type="text" [(ngModel)]="name" placeholder="Text">
+            </div>
+
+            <div class="row">
+                <div class="form-group flex-1">
+                    <label>FROM *</label>
+                    <input type="text" [(ngModel)]="fromLocation" placeholder="Start">
+                </div>
+                <div class="form-group flex-1">
+                    <label>TO *</label>
+                    <input type="text" [(ngModel)]="toLocation" placeholder="End">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>TRANSPORT TYPE *</label>
+                <div class="transport-selector">
+                    <button [class.active]="transportType === 'BIKE'" (click)="setTransport('BIKE')">Bike</button>
+                    <button [class.active]="transportType === 'HIKE'" (click)="setTransport('HIKE')">Hike</button>
+                    <button [class.active]="transportType === 'RUNNING'" (click)="setTransport('RUNNING')">Run</button>
+                    <button [class.active]="transportType === 'VACATION'" (click)="setTransport('VACATION')">Car</button>
+                </div>
+            </div> 
+
+            <div class="ors-section">
+                <label class="ors-label">AUTO-FILLED VIA OPENROUTESERVICE (read-only)</label>
+                <div class="row">
+                    <div class="info-box dashed">
+                        Distance : {{ distance }} km
+                    </div>
+                    <div class="info-box dashed">
+                        Est. Time : {{ estimatedTime }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-preview dashed">
+                <span class="map-text">[ Map loads after From/To are entered ]</span>
+            </div>
+
+            <div class="form-group">
+                <label>DESCRIPTION</label>
+                <textarea rows="3" [(ngModel)]="description" placeholder="Optional description..."></textarea>
+            </div>
+        </div>
+
+        <footer class="modal-footer">
+            <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+            <button class="btn-save" (click)="onSave()">Save Tour</button>
+        </footer>
+    </div>
+</div>

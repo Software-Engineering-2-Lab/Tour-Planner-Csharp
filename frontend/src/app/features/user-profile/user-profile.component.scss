@@ -1,0 +1,197 @@
+:host {
+    display: block;
+    max-width: 480px;
+    margin: 48px auto;
+    padding: 0;
+    font-family: 'DM Mono', 'Courier New', monospace;
+    color: #0a0a0a;
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #0a0a0a;
+    margin-bottom: 32px;
+
+    .avatar {
+        width: 52px;
+        height: 52px;
+        background: #0a0a0a;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    h2 {
+        margin: 0 0 3px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .email-label {
+        font-size: 0.78rem;
+        color: #888;
+    }
+}
+
+// ── Sections ─────────────────────────────────────────────────────────────────
+.profile-section {
+    margin-bottom: 36px;
+
+    h3 {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #888;
+        margin: 0 0 16px;
+    }
+}
+
+// ── Detail rows ──────────────────────────────────────────────────────────────
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #e0e0e0;
+
+    .detail-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .detail-label {
+        font-size: 0.68rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .detail-value {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #0a0a0a;
+    }
+}
+
+.btn-edit {
+    padding: 5px 14px;
+    border: 1px solid #0a0a0a;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: #0a0a0a;
+    transition: background 0.1s, color 0.1s;
+
+    &:hover { background: #0a0a0a; color: #fff; }
+}
+
+// ── Inline edit forms ────────────────────────────────────────────────────────
+.inline-form {
+    padding: 14px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid #e0e0e0;
+
+    input {
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px solid #0a0a0a;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.88rem;
+        color: #0a0a0a;
+        outline: none;
+
+        &::placeholder { color: #bbb; }
+    }
+
+    .error {
+        font-size: 0.72rem;
+        color: #c0392b;
+    }
+}
+
+.btn-save {
+    align-self: flex-start;
+    padding: 8px 20px;
+    background: #0a0a0a;
+    color: #fff;
+    border: 1px solid #0a0a0a;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: opacity 0.1s;
+
+    &:hover:not(:disabled) { opacity: 0.75; }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+
+// ── Stats grid ───────────────────────────────────────────────────────────────
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.stat-card {
+    border: 1px solid #e0e0e0;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fafafa;
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0a0a0a;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+        color: #888;
+        margin-top: 6px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.profile-footer {
+    margin-top: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+
+    .btn-back {
+        padding: 0;
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: #888;
+        letter-spacing: 0.5px;
+        transition: color 0.1s;
+
+        &:hover { color: #0a0a0a; }
+    }
+}

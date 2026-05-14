@@ -1,0 +1,34 @@
+<div class="sidebar-container">
+    <header class="sidebar-header">
+        <h3>MY TOURS ({{ filteredTours().length }})</h3>
+    </header>
+
+    <div class="search-wrapper">
+        <input type="text" 
+               placeholder="Search tours..." 
+               (input)="onSearchChange($event)">
+    </div>
+
+    <nav class="tour-list-nav">
+        <ul class="tour-items">
+            @for (tour of filteredTours(); track tour.id) {
+                <li (click)="selectTour(tour)" 
+                [class.active]="tour.id === selectedTour()?.id"
+                class="tour-item">
+                <span class="tour-name">{{ tour.name }}</span>
+            </li>
+            } @empty {
+                <li class="no-tours">No tours found.</li>
+            }
+            
+        </ul>
+    </nav>
+
+    <footer class="sidebar-footer">
+        <button class="btn-add-tour" (click)="openAddTour()">+ Add Tour</button>
+
+         @if (isTourModalOpen()) {
+        <app-tour-modal (close)="closeTourModal()"></app-tour-modal>
+        }   
+    </footer>
+</div>

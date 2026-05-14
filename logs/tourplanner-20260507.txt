@@ -1,0 +1,60 @@
+2026-05-07 15:38:14.598 +00:00 [INF] Starting TourPlanner Backend...
+2026-05-07 15:38:14.918 +00:00 [INF] Now listening on: http://[::]:8080
+2026-05-07 15:38:14.924 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-07 15:38:14.925 +00:00 [INF] Hosting environment: Development
+2026-05-07 15:38:14.926 +00:00 [INF] Content root path: /app
+2026-05-07 15:38:20.231 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/api/test/error - null null
+2026-05-07 15:38:20.304 +00:00 [WRN] Failed to determine the https port for redirect.
+2026-05-07 15:38:20.312 +00:00 [INF] Executing endpoint 'BackendNet.Controllers.TestController.GetError (backend)'
+2026-05-07 15:38:20.342 +00:00 [INF] Route matched with {action = "GetError", controller = "Test"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetError() on controller BackendNet.Controllers.TestController (backend).
+2026-05-07 15:38:20.349 +00:00 [INF] Executed action BackendNet.Controllers.TestController.GetError (backend) in 2.3688ms
+2026-05-07 15:38:20.352 +00:00 [INF] Executed endpoint 'BackendNet.Controllers.TestController.GetError (backend)'
+2026-05-07 15:38:20.354 +00:00 [ERR] An unhandled exception occurred: Test Error: Serilog și Middleware funcționează!
+System.Exception: Test Error: Serilog și Middleware funcționează!
+   at BackendNet.Controllers.TestController.GetError() in /app/controller/TestController.cs:line 12
+   at lambda_method1(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at BackendNet.Exceptions.ExceptionMiddleware.InvokeAsync(HttpContext context) in /app/exception/ExceptionMiddleware.cs:line 26
+2026-05-07 15:38:20.400 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/api/test/error - 500 null application/json 170.7608ms
+2026-05-07 15:38:20.536 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/favicon.ico - null null
+2026-05-07 15:38:20.540 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/favicon.ico - 404 0 null 5.2952ms
+2026-05-07 15:38:20.542 +00:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:8080/favicon.ico, Response status code: 404
+2026-05-07 15:39:58.220 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:8080/api/test/error - null null
+2026-05-07 15:39:58.229 +00:00 [INF] Executing endpoint 'BackendNet.Controllers.TestController.GetError (backend)'
+2026-05-07 15:39:58.231 +00:00 [INF] Route matched with {action = "GetError", controller = "Test"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetError() on controller BackendNet.Controllers.TestController (backend).
+2026-05-07 15:39:58.233 +00:00 [INF] Executed action BackendNet.Controllers.TestController.GetError (backend) in 0.5498ms
+2026-05-07 15:39:58.234 +00:00 [INF] Executed endpoint 'BackendNet.Controllers.TestController.GetError (backend)'
+2026-05-07 15:39:58.235 +00:00 [ERR] An unhandled exception occurred: Test Error: Serilog și Middleware funcționează!
+System.Exception: Test Error: Serilog și Middleware funcționează!
+   at BackendNet.Controllers.TestController.GetError() in /app/controller/TestController.cs:line 12
+   at lambda_method1(Closure, Object, Object[])
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at BackendNet.Exceptions.ExceptionMiddleware.InvokeAsync(HttpContext context) in /app/exception/ExceptionMiddleware.cs:line 26
+2026-05-07 15:39:58.255 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:8080/api/test/error - 500 null application/json 34.6792ms
+2026-05-07 15:40:40.612 +00:00 [INF] Application is shutting down...

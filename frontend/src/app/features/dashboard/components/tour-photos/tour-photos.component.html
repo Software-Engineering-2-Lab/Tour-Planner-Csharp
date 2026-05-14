@@ -1,0 +1,31 @@
+<div class="photos-container">
+    <input type="file" #fileInput (change)="onFileSelected($event)" multiple hidden accept="image/*">
+
+    <h3 class="gallery-title">PHOTOS ({{ uploadedPhotos.length }})</h3>
+
+    <div class="photos-grid">
+        <div class="upload-dropzone" 
+             [class.dragging]="isDragging"
+             (click)="fileInput.click()"
+             (drop)="onFileDropped($event)"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)">
+            <span class="drop-icon">+</span>
+            <span class="drop-text">DROP / CLICK</span>
+        </div>
+
+       @for (photo of uploadedPhotos; track photo.url; let i = $index) {
+    <div class="photo-card">
+        <button class="delete-btn" (click)="deletePhoto(i)">&#10006;</button>
+        <div class="image-container">
+            <img [src]="photo.url">
+        </div>
+        <div class="photo-info">
+            <span class="photo-date">{{ photo.date | date:'HH:mm:ss' }}</span>
+        </div>
+    </div>
+} @empty {
+    <p>No photos uploaded yet.</p>
+}
+    </div>
+</div>

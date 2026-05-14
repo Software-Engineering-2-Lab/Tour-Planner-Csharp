@@ -1,0 +1,58 @@
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TourPlanner.backend.Data;
+using TourPlanner.backend.Entities;
+
+namespace TourPlanner.backend.Repositories
+{
+    public class LogRepository : ILogRepository
+    {
+        private readonly ApplicationDbContext _context;
+
+        public LogRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<Log>> FindByTourIdAsync(long tourId)
+        {
+            return await _context.Logs
+                .Where(l => l.TourId == tourId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Log>> FindByTourAsync(Tour tour)
+        {
+            return await _context.Logs
+                .Where(l => l.Tour == tour)
+                .ToListAsync();
+        }
+
+        public async Task<Log?> GetByIdAsync(long id) 
+        {
+            return await _context.Logs.FindAsync(id);
+        }
+
+        public async Task<Log> AddAsync(Log log)
+        {
+            _context.Logs.Add(log);
+            await _context.SaveChangesAsync();
+            return log;
+        }
+
+        public async Task<Log> UpdateAsync(Log log)
+        {
+            _context.Logs.Update(log); 
+            await _context.SaveChangesAsync();
+            return log;
+        }
+
+        public async Task DeleteAsync(Log log) 
+        {
+            _context.Logs.Remove(log); 
+            await _context.SaveChangesAsync();
+        }
+    }
+}

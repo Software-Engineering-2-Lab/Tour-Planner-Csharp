@@ -1,0 +1,99 @@
+.photos-container {
+    padding: 10px 0;
+}
+
+.gallery-title {
+    font-size: 0.8rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px); 
+    gap: 20px;
+}
+
+.upload-dropzone, .photo-card {
+    width: 200px;
+    height: 220px; 
+    border: 2px solid #000;
+    background: #fff;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.upload-dropzone {
+    border-style: dashed;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px dashed #000;
+    
+    &.dragging {
+        background: #bdbdbd; 
+        border-style: solid;
+        transform: scale(1.02); 
+    }
+
+    &:hover {
+        border-color: #444;
+        background: #f0f0f0;
+    }
+}
+
+.photo-card {
+    display: flex;
+    flex-direction: column;
+
+    .image-container {
+        flex: 1;
+        overflow: hidden;
+        background: #eee;
+        border-bottom: 1px solid #000;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+        }
+    }
+
+    .photo-info {
+        padding: 5px 8px;
+        background: #fff;
+        .photo-date {
+            font-size: 0.6rem;
+            color: #777;
+            font-weight: bold;
+        }
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #000;
+        cursor: pointer;
+        padding: 2px 5px;
+        z-index: 10;
+        font-size: 0.9rem;
+        
+        &:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

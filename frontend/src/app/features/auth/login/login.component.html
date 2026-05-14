@@ -1,0 +1,137 @@
+<div class="auth-card">
+    <div class="auth-header">
+        <h1>TourPlanner</h1>
+    </div>
+    
+    <div class="auth-toggle">
+        <button type="button" 
+            class="toggle-btn" 
+            [disabled]="isLoading"
+            [class.active]="isLoginMode" 
+            (click)="switchMode('login')">
+            Login
+        </button>
+        <button type="button" 
+            class="toggle-btn" 
+            [disabled]="isLoading"
+            [class.active]="!isLoginMode" 
+            (click)="switchMode('register')">
+            Register
+        </button>
+    </div>
+    
+    <div class="auth-form-container">
+        @if(isLoginMode) {
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-content">
+            <div class="input-group">
+                <label for="login-email">EMAIL</label>
+                <input id="login-email" type="email" formControlName="email" placeholder="email" autofocus [readonly]="isLoading">
+            </div>
+            <div class="input-group">
+                <label for="login-password">PASSWORD</label>
+                <div class="password-wrapper">
+                    <input id="login-password" [type]="showLoginPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••" [readonly]="isLoading">
+                    <button type="button" class="eye-btn" (click)="togglePasswordVisibility('login')" [disabled]="isLoading">
+                        @if (!showLoginPassword) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 17c-5.35 0-7.42-3.84-7.93-5 .2-.46.65-1.34 1.45-2.23l-1.4-1.4c-1.49 1.65-2.06 3.28-2.08 3.31-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68.91 0 1.73-.1 2.49-.26l-1.77-1.77c-.24.02-.47.03-.72.03Zm9.95-4.68c.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68-1.84 0-3.36.39-4.61.97L2.71 1.29 1.3 2.7l4.32 4.32 1.42 1.42 2.27 2.27 3.98 3.98 1.8 1.8 1.53 1.53 4.68 4.68 1.41-1.41-4.32-4.32c2.61-1.95 3.55-4.61 3.56-4.65m-7.25.97c.19-.39.3-.83.3-1.29 0-1.64-1.36-3-3-3-.46 0-.89.11-1.29.3l-1.8-1.8c.88-.31 1.9-.5 3.08-.5 5.35 0 7.42 3.85 7.93 5-.3.69-1.18 2.33-2.96 3.55z"></path>
+                        </svg>
+                        }
+                        @if (showLoginPassword) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 9a3 3 0 1 0 0 6 3 3 0 1 0 0-6"></path><path d="M12 19c7.63 0 9.93-6.62 9.95-6.68.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5"></path>
+                        </svg>
+                        }
+                       
+                    </button>
+                </div>
+            </div>
+            <div class="error-container" *ngIf="loginSubmitFailed && serverErrorMessage">
+                <span class="error-message">{{ serverErrorMessage }}</span>
+            </div>
+            <button type="submit" class="submit-btn" [disabled]="isLoading">Login</button>
+            <a href="#" class="forgot-link" *ngIf="showForgotPassword">Forgot password?</a>
+        </form>    
+        }
+        
+      @if (!isLoginMode) {
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-content">
+    
+     <div class="input-group">
+        <label for="register-username">USERNAME</label>
+        <input id="register-username" type="text" formControlName="username" placeholder="Name" autofocus [readonly]="isLoading">
+        
+        @if (registerSubmitFailed && registerForm.get('username')?.invalid) {
+            <span class="field-error">Username is required</span>
+        }
+     </div>
+
+    <div class="input-group">
+        <label for="register-email">EMAIL</label>
+        <input id="register-email" type="email" formControlName="email" placeholder="email" [readonly]="isLoading">
+        
+        @if (registerSubmitFailed && registerForm.get('email')?.invalid) {
+            <span class="field-error">Valid email is required</span>
+        }
+    </div>
+
+    <div class="input-group">
+        <label for="register-password">PASSWORD</label>
+        <div class="password-wrapper">
+            <input id="register-password" [type]="showRegisterPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••" [readonly]="isLoading">
+            
+            <button type="button" class="eye-btn" (click)="togglePasswordVisibility('register')" [disabled]="isLoading">
+                @if (!showRegisterPassword) {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17c-5.35 0-7.42-3.84-7.93-5 .2-.46.65-1.34 1.45-2.23l-1.4-1.4c-1.49 1.65-2.06 3.28-2.08 3.31-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68.91 0 1.73-.1 2.49-.26l-1.77-1.77c-.24.02-.47.03-.72.03Zm9.95-4.68c.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68-1.84 0-3.36.39-4.61.97L2.71 1.29 1.3 2.7l4.32 4.32 1.42 1.42 2.27 2.27 3.98 3.98 1.8 1.8 1.53 1.53 4.68 4.68 1.41-1.41-4.32-4.32c2.61-1.95 3.55-4.61 3.56-4.65m-7.25.97c.19-.39.3-.83.3-1.29 0-1.64-1.36-3-3-3-.46 0-.89.11-1.29.3l-1.8-1.8c.88-.31 1.9-.5 3.08-.5 5.35 0 7.42 3.85 7.93 5-.3.69-1.18 2.33-2.96 3.55z"></path>
+                    </svg>
+                } @else {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 9a3 3 0 1 0 0 6 3 3 0 1 0 0-6"></path>
+                        <path d="M12 19c7.63 0 9.93-6.62 9.95-6.68.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5"></path>
+                    </svg>
+                }
+            </button>
+        </div>
+
+        @if (registerSubmitFailed && registerForm.get('password')?.invalid) {
+            <span class="field-error">Password must be at least 8 characters</span>
+        }
+    </div>
+
+    <div class="input-group">
+        <label for="register-confirm-password">CONFIRM PASSWORD</label>
+        <div class="password-wrapper">
+            <input id="register-confirm-password" [type]="showRegisterConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="••••••••" [readonly]="isLoading">
+            
+            <button type="button" class="eye-btn" (click)="togglePasswordVisibility('confirm')" [disabled]="isLoading">
+                @if (!showRegisterConfirmPassword) {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17c-5.35 0-7.42-3.84-7.93-5 .2-.46.65-1.34 1.45-2.23l-1.4-1.4c-1.49 1.65-2.06 3.28-2.08 3.31-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68.91 0 1.73-.1 2.49-.26l-1.77-1.77c-.24.02-.47.03-.72.03Zm9.95-4.68c.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68-1.84 0-3.36.39-4.61.97L2.71 1.29 1.3 2.7l4.32 4.32 1.42 1.42 2.27 2.27 3.98 3.98 1.8 1.8 1.53 1.53 4.68 4.68 1.41-1.41-4.32-4.32c2.61-1.95 3.55-4.61 3.56-4.65m-7.25.97c.19-.39.3-.83.3-1.29 0-1.64-1.36-3-3-3-.46 0-.89.11-1.29.3l-1.8-1.8c.88-.31 1.9-.5 3.08-.5 5.35 0 7.42 3.85 7.93 5-.3.69-1.18 2.33-2.96 3.55z"></path>
+                    </svg>
+                } @else {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 9a3 3 0 1 0 0 6 3 3 0 1 0 0-6"></path>
+                        <path d="M12 19c7.63 0 9.93-6.62 9.95-6.68.07-.21.07-.43 0-.63-.02-.07-2.32-6.68-9.95-6.68s-9.93 6.61-9.95 6.67c-.07.21-.07.43 0 .63.02.07 2.32 6.68 9.95 6.68Zm0-12c5.35 0 7.42 3.85 7.93 5-.5 1.16-2.58 5-7.93 5s-7.42-3.84-7.93-5c.5-1.16 2.58-5 7.93-5"></path>
+                    </svg>
+                }
+            </button>
+        </div>
+
+        @if (registerSubmitFailed && registerForm.hasError('passwordMismatch')) {
+            <span class="field-error">Passwords do not match!</span>
+        }
+    </div>
+
+    @if (registerSubmitFailed && serverErrorMessage) {
+        <div class="error-container">
+            <span class="error-message">{{ serverErrorMessage }}</span>
+        </div>
+    }
+
+    <button type="submit" class="submit-btn" [disabled]="isLoading">Create Account</button>
+</form>
+}
+       
+    </div>
+</div>

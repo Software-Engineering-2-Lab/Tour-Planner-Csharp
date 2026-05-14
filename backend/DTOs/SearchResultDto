@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace TourPlanner.backend.DTOs
+{
+    public class SearchResultDto 
+    {
+        public List<TourDto> Tours { get; set; } = new List<TourDto>();
+        
+        public int TotalResults { get; set; }
+        
+        public string SearchQuery { get; set; }
+    }
+}

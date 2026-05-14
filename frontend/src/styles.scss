@@ -1,0 +1,38 @@
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$magenta-palette,
+        tertiary: mat.$violet-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: #f2f2f0;
+  color: #0a0a0a;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  margin: 0;
+  height: 100%;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #f2f2f0;
+  overflow-x: hidden;
+}
+
+app-root {
+  display: block;
+  min-height: 100%;
+}
