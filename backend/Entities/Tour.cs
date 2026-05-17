@@ -36,10 +36,10 @@ namespace TourPlanner.backend.Entities
         public TransportType TransportType { get; set; }
 
         [Column("distance")]
-        public double? Distance { get; set; }
+        public double Distance { get; set; }
 
         [Column("estimated_time")]
-        public double? EstimatedTime { get; set; }
+        public double EstimatedTime { get; set; }
 
         [Column("route_image_path")]
         public string? RouteImagePath { get; set; }

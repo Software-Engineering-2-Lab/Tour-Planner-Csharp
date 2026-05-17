@@ -12,6 +12,17 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+// --- 1. CONFIGURARE CORS (Adăugată) ---
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // URL-ul frontend-ului tău (Angular)
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -27,7 +38,14 @@ try
 
     app.UseMiddleware<ExceptionMiddleware>();
 
-    app.UseHttpsRedirection();
+    // --- 2. ACTIVARE CORS (Adăugată - Obligatoriu înainte de MapControllers) ---
+    app.UseCors("AllowFrontend");
+
+    // --- 3. CORECTIE DOCKER (Comentat/Scurs) ---
+    // În Docker se rulează de obicei pe HTTP în interiorul containerului. 
+    // Dacă frontend-ul apelează http://localhost:8080, scoate linia de mai jos:
+    // app.UseHttpsRedirection(); 
+
     app.UseAuthorization();
     app.MapControllers();
 

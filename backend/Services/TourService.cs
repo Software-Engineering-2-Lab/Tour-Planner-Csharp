@@ -1,0 +1,120 @@
+using TourPlanner.backend.Entities;
+using TourPlanner.backend.DTOs;
+using TourPlanner.backend.Repositories;
+using TourPlanner.backend.Enums;
+using Microsoft.OpenApi;
+
+
+namespace TourPlanner.backend.Services;
+
+public class TourService : ITourService 
+{
+   private readonly ITourRepository _tourRepository;
+
+   public TourService (ITourRepository tourRepository)
+  {
+    _tourRepository=tourRepository;
+  }
+   public async Task<TourDto> CreateAsync (TourDto dto)
+  {
+    var tour = new Tour
+    {
+      Id = dto.Id,
+      Name=dto.Name,
+      Description=dto.Description,
+      FromLocation=dto.FromLocation,
+      ToLocation=dto.ToLocation,
+      TransportType=dto.TransportType,
+      Distance=dto.Distance,
+      EstimatedTime=dto.EstimatedTime,
+      RouteImagePath=dto.RouteImagePath,
+      Popularity=dto.Popularity,
+      ChildFriendliness=dto.ChildFriendliness,
+      UserId=dto.UserId
+    };
+
+    var createdTour = await _tourRepository.AddAsync(tour);
+
+    return MapToDto(createdTour);
+  }
+
+  public async Task<TourDto> UpdateAsync(long id, TourDto dto)
+  {
+    var existingTour = await _tourRepository.GetByIdAsync(id);
+
+    if(existingTour==null)
+    {
+      throw new Exception("Tour not found.");
+    }
+      existingTour.Name=dto.Name;
+      existingTour.Description=dto.Description;
+      existingTour.FromLocation=dto.FromLocation;
+      existingTour.ToLocation=dto.ToLocation;
+      existingTour.TransportType=dto.TransportType;
+      existingTour.Distance=dto.Distance;
+      existingTour.EstimatedTime=dto.EstimatedTime;
+      existingTour.RouteImagePath=dto.RouteImagePath;
+      existingTour.Popularity=dto.Popularity;
+      existingTour.ChildFriendliness=dto.ChildFriendliness;
+      existingTour.UserId=dto.UserId;
+    
+    await _tourRepository.UpdateAsync(existingTour);
+
+    return MapToDto(existingTour);
+  }
+
+  public async Task DeleteAsync(long id)
+  {
+    var tour = await _tourRepository.GetByIdAsync(id);
+    if (tour != null)
+    {
+        await _tourRepository.DeleteAsync(tour);
+    }
+  }
+  private TourDto MapToDto (Tour tour)
+  {
+    return new TourDto
+    {
+      Id = tour.Id,
+      Name=tour.Name,
+      Description=tour.Description,
+      FromLocation=tour.FromLocation,
+      ToLocation=tour.ToLocation,
+      TransportType=tour.TransportType,
+      Distance=tour.Distance,
+      EstimatedTime=tour.EstimatedTime,
+      RouteImagePath=tour.RouteImagePath,
+      Popularity=tour.Popularity??0,
+      ChildFriendliness=tour.ChildFriendliness??0.0,
+      UserId=tour.UserId
+    };
+  }
+
+  public async Task<TourDto?> FindByIdAsync(long id)
+  {
+    var tour = await _tourRepository.GetByIdAsync(id);
+
+    return tour != null ? MapToDto(tour) : null;
+  }
+
+  public async Task<List<TourDto>> FindByUserIdAsync(long userId)
+  {
+    var tours = await _tourRepository.FindByUserIdAsync(userId);
+
+    return tours.Select(tour => MapToDto(tour)).ToList();
+  }
+
+  public async Task<SearchResultDto> SearchAsync(string query)
+  {
+    var tours = await _tourRepository.FullTextSearchAsync(query);
+
+    SearchResultDto finalResult = new SearchResultDto();
+
+    return new SearchResultDto
+    {
+        Tours = tours.Select(tour => MapToDto(tour)).ToList(), 
+        TotalResults = tours.Count,                           
+        SearchQuery = query
+    };
+  }
+}
