@@ -3917,11 +3917,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Dev\\Tour-Planner\\TourPlanner\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Dev\\Tour-Planner-C#\\TourPlanner\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Dev\\Tour-Planner\\TourPlanner\\backend\\backend.csproj",
+      "projectPath": "C:\\Dev\\Tour-Planner-C#\\TourPlanner\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\40721\\.nuget\\packages\\",
-      "outputPath": "C:\\Dev\\Tour-Planner\\TourPlanner\\backend\\obj\\",
+      "outputPath": "C:\\Dev\\Tour-Planner-C#\\TourPlanner\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\40721\\AppData\\Roaming\\NuGet\\NuGet.Config"

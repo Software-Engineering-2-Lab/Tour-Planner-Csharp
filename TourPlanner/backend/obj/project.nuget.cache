@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FHcoTDgToUg=",
+  "dgSpecHash": "U3MuievFbUY=",
   "success": true,
-  "projectFilePath": "C:\\Dev\\Tour-Planner\\TourPlanner\\backend\\backend.csproj",
+  "projectFilePath": "C:\\Dev\\Tour-Planner-C#\\TourPlanner\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\40721\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\40721\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
