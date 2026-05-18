@@ -52,7 +52,9 @@ namespace TourPlanner.backend.Repositories
 
         public async Task<Tour?> GetByIdAsync(long id) 
         {
-            return await _context.Tours.FindAsync(id);
+            return await _context.Tours
+                .Include(t => t.Logs)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<Tour> AddAsync(Tour tour)

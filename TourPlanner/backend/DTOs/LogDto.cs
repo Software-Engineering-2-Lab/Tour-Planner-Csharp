@@ -8,9 +8,9 @@ namespace TourPlanner.backend.DTOs
         public long Id { get; set; }
 
         [JsonPropertyName("dateTime")]
-        public DateTime DateTime { get; set; }
+        public string DateTime { get; set; }
 
-        public string ?Comment { get; set; }
+        public string? Comment { get; set; }
 
         public int Difficulty { get; set; }
 

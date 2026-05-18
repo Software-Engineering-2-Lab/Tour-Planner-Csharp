@@ -38,27 +38,27 @@ export class LogModalComponent {
 	}
 
 	onSave(): void {
-    	const logData: TourLog = {
-        	id: this.editLog ? this.editLog.id : null,
-        	tourId: this.tourId,
-        	dateTime: new Date(this.dateTime).toISOString().split('.')[0],
-        	comment: this.comment,
-        	difficulty: this.difficulty,
-        	totalDistance: Number(this.totalDistance),
-        	totalTime: Number(this.totalTime),
-        	rating: Number(this.rating)
-    	};
+        const logData: TourLog = {
+            id: this.editLog ? this.editLog.id : 0,
+            tourId: this.tourId,
+            dateTime: new Date(this.dateTime).toISOString().split('.')[0],
+            comment: this.comment,
+            difficulty: this.difficulty,
+            totalDistance: Number(this.totalDistance),
+            totalTime: Number(this.totalTime),
+            rating: Number(this.rating)
+        };
 
-    	if (this.editLog) {
-        	this.tourService.updateLog(logData).subscribe(() => {
-            	this.close.emit();
-        	});
-    	} else {
-        	this.tourService.addLog(logData).subscribe(() => {
-            	this.close.emit();
-        	});
-    	}
-	}
+        if (this.editLog) {
+            this.tourService.updateLog(logData).subscribe(() => {
+                this.close.emit();
+            });
+        } else {
+            this.tourService.addLog(logData).subscribe(() => {
+                this.close.emit();
+            });
+        }
+    }
 
     setDifficulty(val: number): void {
         this.difficulty = val;

@@ -11,6 +11,8 @@ namespace TourPlanner.backend.DTOs{
           public string? Description { get; set; }
           public required string FromLocation { get; set; }
           public required string ToLocation { get; set; }
+          
+          [JsonConverter(typeof(JsonStringEnumConverter))]
           public TransportType TransportType { get; set; }
           public double Distance { get; set; }
           public double EstimatedTime { get; set; }

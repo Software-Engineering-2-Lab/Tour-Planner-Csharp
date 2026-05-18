@@ -34,8 +34,7 @@ public class LogService : ILogService
 
     var log = new Log
     {
-      Id = dto.Id,
-      DateTime = dto.DateTime,
+      DateTime = DateTime.TryParse(dto.DateTime, out var parsedDate) ? DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc) : DateTime.UtcNow,
       Comment = dto.Comment ?? string.Empty,
       Difficulty = dto.Difficulty,
       TotalDistance = dto.TotalDistance,
@@ -47,7 +46,6 @@ public class LogService : ILogService
     var createdLog = await _logRepository.AddAsync(log);
 
     return MapToDto(createdLog);
-
   }
 
   public async Task<LogDto> UpdateAsync(long tourId, long logId, LogDto dto)
@@ -66,13 +64,13 @@ public class LogService : ILogService
       throw new Exception("Log not found.");
     }
 
-    existingLog.DateTime = dto.DateTime;
+    existingLog.DateTime = DateTime.TryParse(dto.DateTime, out var parsedDate) ? DateTime.SpecifyKind(parsedDate, DateTimeKind.Utc) : existingLog.DateTime;
     existingLog.Comment = dto.Comment ?? string.Empty;
     existingLog.Difficulty = dto.Difficulty;
     existingLog.TotalDistance = dto.TotalDistance;
     existingLog.TotalTime = dto.TotalTime;
     existingLog.Rating = dto.Rating;
-    existingLog.TourId = dto.TourId;
+    existingLog.TourId = tourId;
 
     await _logRepository.UpdateAsync(existingLog);
 
@@ -92,7 +90,7 @@ public class LogService : ILogService
     return new LogDto
     {
       Id=log.Id,
-      DateTime = log.DateTime,
+      DateTime = log.DateTime.ToString("o"), 
       Comment = log.Comment,
       Difficulty = log.Difficulty,
       TotalDistance = log.TotalDistance,

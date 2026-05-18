@@ -1,5 +1,12 @@
 using Serilog;
+using Log = Serilog.Log;
 using BackendNet.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using TourPlanner.backend.Data;
+using TourPlanner.backend.Repositories;
+using TourPlanner.backend.Entities;
+using TourPlanner.backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +19,22 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// --- 1. CONFIGURARE CORS (Adăugată) ---
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
+builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // URL-ul frontend-ului tău (Angular)
+        policy.WithOrigins("http://localhost:4200")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -31,20 +48,21 @@ try
     Log.Information("Starting TourPlanner Backend...");
     var app = builder.Build();
 
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        Log.Information("Applying pending database migrations...");
+        db.Database.Migrate();
+        Log.Information("Database is up to date.");
+    }
+
     if (app.Environment.IsDevelopment())
     {
         app.MapOpenApi();
     }
 
     app.UseMiddleware<ExceptionMiddleware>();
-
-    // --- 2. ACTIVARE CORS (Adăugată - Obligatoriu înainte de MapControllers) ---
     app.UseCors("AllowFrontend");
-
-    // --- 3. CORECTIE DOCKER (Comentat/Scurs) ---
-    // În Docker se rulează de obicei pe HTTP în interiorul containerului. 
-    // Dacă frontend-ul apelează http://localhost:8080, scoate linia de mai jos:
-    // app.UseHttpsRedirection(); 
 
     app.UseAuthorization();
     app.MapControllers();
