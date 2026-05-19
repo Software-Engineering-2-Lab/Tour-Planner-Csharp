@@ -60,9 +60,29 @@ namespace TourPlanner.backend.Controllers
                 return Unauthorized(new { message = "Invalid email or password" });
             }
 
+            var claims = new System.Security.Claims.Claim[]
+            {
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, user.Username)
+            };
+
+            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("ExtraMegaSuperSecureSecurityTokenKey"));
+            var creds = new Microsoft.IdentityModel.Tokens.SigningCredentials(key, Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(claims),
+                Expires = System.DateTime.UtcNow.AddDays(7),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            var realToken = tokenHandler.WriteToken(securityToken);
+
             return Ok(new
             {
-                token = "dummy-jwt-token",
+                token = realToken,
                 userId = user.Id,
                 username = user.Username
             });

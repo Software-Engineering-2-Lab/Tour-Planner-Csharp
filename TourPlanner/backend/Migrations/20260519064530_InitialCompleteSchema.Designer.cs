@@ -12,8 +12,8 @@ using TourPlanner.backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260518115922_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260519064530_InitialCompleteSchema")]
+    partial class InitialCompleteSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,6 +133,35 @@ namespace backend.Migrations
                     b.ToTable("tours");
                 });
 
+            modelBuilder.Entity("TourPlanner.backend.Entities.TourImage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("file_name");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("file_path");
+
+                    b.Property<long>("TourId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("tour_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TourId");
+
+                    b.ToTable("tour_images");
+                });
+
             modelBuilder.Entity("TourPlanner.backend.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -186,8 +215,21 @@ namespace backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TourPlanner.backend.Entities.TourImage", b =>
+                {
+                    b.HasOne("TourPlanner.backend.Entities.Tour", "Tour")
+                        .WithMany("Images")
+                        .HasForeignKey("TourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tour");
+                });
+
             modelBuilder.Entity("TourPlanner.backend.Entities.Tour", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Logs");
                 });
 

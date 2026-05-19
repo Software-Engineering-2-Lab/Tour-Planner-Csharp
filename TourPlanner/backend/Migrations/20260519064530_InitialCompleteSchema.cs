@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCompleteSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,10 +81,36 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "tour_images",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    file_path = table.Column<string>(type: "text", nullable: false),
+                    file_name = table.Column<string>(type: "text", nullable: false),
+                    tour_id = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tour_images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_tour_images_tours_tour_id",
+                        column: x => x.tour_id,
+                        principalTable: "tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_logs_TourId",
                 table: "logs",
                 column: "TourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tour_images_tour_id",
+                table: "tour_images",
+                column: "tour_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tours_UserId",
@@ -97,6 +123,9 @@ namespace backend.Migrations
         {
             migrationBuilder.DropTable(
                 name: "logs");
+
+            migrationBuilder.DropTable(
+                name: "tour_images");
 
             migrationBuilder.DropTable(
                 name: "tours");

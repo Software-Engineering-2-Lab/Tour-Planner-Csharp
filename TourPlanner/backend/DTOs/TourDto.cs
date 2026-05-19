@@ -20,5 +20,7 @@ namespace TourPlanner.backend.DTOs{
           public int Popularity { get; set; }
           public double ChildFriendliness { get; set; }
           public long UserId { get; set; }
+
+          public List<TourImageDto> TourImages { get; set; } = new();
       }
 }

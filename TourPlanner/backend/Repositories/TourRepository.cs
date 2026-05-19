@@ -33,6 +33,7 @@ namespace TourPlanner.backend.Repositories
         public async Task<List<Tour>> FindByUserIdAsync(long userId)
         {
             return await _context.Tours
+            .Include(t => t.TourImages)
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
         }
@@ -43,6 +44,7 @@ namespace TourPlanner.backend.Repositories
 
             return await _context.Tours
                 .Include(t => t.Logs) // LEFT JOIN în EF Core
+                .Include(t => t.TourImages) 
                 .Where(t => t.Name.ToLower().Contains(searchPattern) ||
                             (t.Description != null && t.Description.ToLower().Contains(searchPattern)) ||
                             t.Logs.Any(l => l.Comment.ToLower().Contains(searchPattern)))
@@ -54,6 +56,7 @@ namespace TourPlanner.backend.Repositories
         {
             return await _context.Tours
                 .Include(t => t.Logs)
+                .Include(t => t.TourImages)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

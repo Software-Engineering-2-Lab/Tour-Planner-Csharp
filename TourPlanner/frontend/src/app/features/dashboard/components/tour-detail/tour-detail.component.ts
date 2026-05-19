@@ -104,4 +104,18 @@ export class TourDetailComponent {
         if (value >= 5) return 'MEDIUM';
         return 'EASY';
     }
+
+    onLocalPhotoAdded(newPhoto: any): void {
+        const currentTour = this.selectedTour();
+        if (!currentTour) return;
+
+        // Creăm o listă nouă care conține și poza nouă
+        const updatedImages = currentTour.tourImages ? [...currentTour.tourImages, newPhoto] : [newPhoto];
+
+        // Actualizăm Signal-ul cu noul obiect modificat
+        this.selectedTour.set({
+            ...currentTour,
+            tourImages: updatedImages
+        });
+    }
 }

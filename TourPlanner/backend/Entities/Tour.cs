@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TourPlanner.backend.Enums;
+using TourPlanner.backend.Data;
 
 namespace TourPlanner.backend.Entities
 {
@@ -49,12 +50,13 @@ namespace TourPlanner.backend.Entities
 
         [Column("child_friendliness")]
         public double? ChildFriendliness { get; set; }
-        
 
         [ForeignKey("UserId")]
         public User User { get; set; }
         public long UserId { get; set; }
 
         public ICollection<Log> Logs { get; set; } = new List<Log>();
+
+        public ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
     }
 }

@@ -16,3 +16,14 @@ Thumbs.db
 postgres_data/
 TourPlanner/user_images/*
 !TourPlanner/user_images/.gitkeep
+
+# .NET build artifacts
+**/bin/
+**/obj/
+
+[Bb]in/
+[Oo]bj/
+
+# Log files
+**/logs/
+*.txt

@@ -114,7 +114,9 @@
 
         @if (activeTab()==='photos' && selectedTour(); as tour) {
          <div>
-            <app-tour-photos [tourId]="tour.id"></app-tour-photos>
+            <app-tour-photos [tourId]="selectedTour()?.id" 
+                             [initialImages]="selectedTour()?.tourImages || []" 
+                             (photoAdded)="onLocalPhotoAdded($event)">"></app-tour-photos>
          </div>  
         }
        

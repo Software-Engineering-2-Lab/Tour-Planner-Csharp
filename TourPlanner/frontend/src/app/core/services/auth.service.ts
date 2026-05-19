@@ -26,12 +26,12 @@ export class AuthService {
     }
 
     getToken(): string | null {
-        return localStorage.getItem('jwt_token');
+        return localStorage.getItem('token');
     }
 
     saveToken(token: string) {
     localStorage.setItem('token', token);
-    this._isLoggedIn.set(true); // Label: Notify the app immediately
+    this._isLoggedIn.set(true); 
 }
 
     logout() {

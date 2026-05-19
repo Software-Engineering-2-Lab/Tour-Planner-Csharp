@@ -86,7 +86,15 @@ public class TourService : ITourService
       RouteImagePath=tour.RouteImagePath,
       Popularity=tour.Popularity??0,
       ChildFriendliness=tour.ChildFriendliness??0.0,
-      UserId=tour.UserId
+      UserId=tour.UserId,
+      TourImages = tour.TourImages?.Select(img => new TourImageDto
+            {
+                Id = img.Id,
+                FileName = img.FileName,
+                Url = $"/api/tours/{tour.Id}/photos/{img.Id}",
+                TourId = tour.Id,
+                CreatedAt = img.CreatedAt
+            }).ToList() ?? new List<TourImageDto>()
     };
   }
 

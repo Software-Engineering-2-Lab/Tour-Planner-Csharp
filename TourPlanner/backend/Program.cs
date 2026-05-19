@@ -7,6 +7,9 @@ using TourPlanner.backend.Data;
 using TourPlanner.backend.Repositories;
 using TourPlanner.backend.Entities;
 using TourPlanner.backend.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +32,11 @@ builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -39,6 +46,25 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ExtraMegaSuperSecureSecurityTokenKey"))
+    };
+});
+
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -63,7 +89,8 @@ try
 
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseCors("AllowFrontend");
-
+    app.UseStaticFiles();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
 

@@ -1,3 +1,5 @@
+import { TourImageDto } from "../services/photos.service";
+
 export interface Tour {
     id: number;
     name: string;
@@ -11,6 +13,7 @@ export interface Tour {
     popularity: number;
     childFriendliness: number;
     userId: number;
+    tourImages?: TourImageDto[];
 }
 
 export interface CreateTourDto extends Omit<Tour, 'id' | 'popularity' | 'childFriendliness'> {
