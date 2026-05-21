@@ -10,9 +10,11 @@ using TourPlanner.backend.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using TourPlanner.backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Serilog Configuration
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
@@ -22,10 +24,15 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+// External Services HTTP Clients
+builder.Services.AddHttpClient<IGeocodingService, GeocodingService>();
+
+// Database Context Configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+// Dependency Injection Registrations
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<ITourService, TourService>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
@@ -34,9 +41,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 
-
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+// CORS Configuration
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -47,7 +52,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+// JWT Authentication Configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +70,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
+// Controllers & OpenAPI (Păstrate doar o singură dată aici)
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -74,6 +79,7 @@ try
     Log.Information("Starting TourPlanner Backend...");
     var app = builder.Build();
 
+    // Automatic Database Migrations on Start-up
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -87,6 +93,7 @@ try
         app.MapOpenApi();
     }
 
+    // Middleware Pipeline (Ordinea contează!)
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseCors("AllowFrontend");
     app.UseStaticFiles();

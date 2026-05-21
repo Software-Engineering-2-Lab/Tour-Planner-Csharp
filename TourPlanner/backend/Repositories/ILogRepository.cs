@@ -13,8 +13,5 @@ namespace TourPlanner.backend.Repositories
         Task<Log> UpdateAsync (Log log);
         Task DeleteAsync (Log log);
         
-        
-
-
     }
 }

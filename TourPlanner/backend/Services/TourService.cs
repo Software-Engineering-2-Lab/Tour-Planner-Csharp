@@ -10,13 +10,22 @@ namespace TourPlanner.backend.Services;
 public class TourService : ITourService 
 {
    private readonly ITourRepository _tourRepository;
+   private readonly IGeocodingService _geocodingService;
 
-   public TourService (ITourRepository tourRepository)
+   public TourService (IGeocodingService geocodingService ,ITourRepository tourRepository)
   {
     _tourRepository=tourRepository;
+    _geocodingService=geocodingService;
   }
+
+  
    public async Task<TourDto> CreateAsync (TourDto dto)
   {
+    var (startLon,startLat) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
+    var (endLon, endLat) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
+
+    var(distance,duration,geometry)= await _geocodingService.GetRouteAsync((startLon,startLat),(endLon, endLat),dto.TransportType);
+
     var tour = new Tour
     {
       Id = dto.Id,
@@ -25,9 +34,9 @@ public class TourService : ITourService
       FromLocation=dto.FromLocation,
       ToLocation=dto.ToLocation,
       TransportType=dto.TransportType,
-      Distance=dto.Distance,
-      EstimatedTime=dto.EstimatedTime,
-      RouteImagePath=dto.RouteImagePath,
+      Distance=distance,
+      EstimatedTime=duration,
+      RouteImagePath=geometry,
       Popularity=dto.Popularity,
       ChildFriendliness=dto.ChildFriendliness,
       UserId=dto.UserId
