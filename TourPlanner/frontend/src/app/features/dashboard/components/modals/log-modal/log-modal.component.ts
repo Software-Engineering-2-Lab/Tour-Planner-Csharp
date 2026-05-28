@@ -38,6 +38,18 @@ export class LogModalComponent {
 	}
 
 	onSave(): void {
+        let parsedTime = 0;
+        const timeStr = this.totalTime.toString();
+        
+        if (timeStr.includes(':')) {
+            const parts = timeStr.split(':');
+            const hours = parseInt(parts[0], 10) || 0;
+            const minutes = parseInt(parts[1], 10) || 0;
+            parsedTime = hours + (minutes / 60);
+        } else {
+            parsedTime = Number(timeStr) || 0;
+        }
+
         const logData: TourLog = {
             id: this.editLog ? this.editLog.id : 0,
             tourId: this.tourId,
@@ -45,7 +57,7 @@ export class LogModalComponent {
             comment: this.comment,
             difficulty: this.difficulty,
             totalDistance: Number(this.totalDistance),
-            totalTime: Number(this.totalTime),
+            totalTime: Math.round(parsedTime * 100) / 100,
             rating: Number(this.rating)
         };
 
