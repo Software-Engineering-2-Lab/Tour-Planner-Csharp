@@ -9,7 +9,7 @@ export interface Tour {
     transportType: 'BIKE' | 'HIKE' | 'RUNNING' | 'VACATION';
     distance: number;
     estimatedTime: number;
-    routeImagePath: string;
+    routeImagePath: string | null;
     popularity: number;
     childFriendliness: number;
     userId: number;
