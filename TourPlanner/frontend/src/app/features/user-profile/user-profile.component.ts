@@ -1,76 +1,92 @@
 import { Component, OnInit, inject } from '@angular/core';
-import {AbstractControl, ValidationErrors, FormControl, ReactiveFormsModule, FormGroup, Validators} from '@angular/forms';
-import {CommonModule} from '@angular/common';
-import {AuthService} from '../../core/services/auth.service';
+import { AbstractControl, ValidationErrors, FormControl, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/services/auth.service';
 
-function passwordMatchValidator(group: AbstractControl) : ValidationErrors | null {
-  const pw = group.get('password')?.value;
-  const confirm = group.get('confirmPassword')?.value;
-  return pw && confirm && pw !== confirm ? {mismatch : true} : null; 
+function passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const pw = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return pw && confirm && pw !== confirm ? { mismatch: true } : null;
 }
 
 @Component({
-  selector: 'app-user-profile',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.scss',
+    selector: 'app-user-profile',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './user-profile.component.html',
+    styleUrl: './user-profile.component.scss',
 })
-
 export class UserProfileComponent implements OnInit {
-  private authService = inject(AuthService);
-  
-  username = '';
-  email = '';
+    private authService = inject(AuthService);
 
-  showUsernameForm = false;
-  showEmailForm = false;
-  showPasswordForm = false;
+    username = '';
+    email = '';
+    totalTours = 0;
+    totalLogs = 0;
 
-  profileForm = new FormGroup({
-  username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-  email: new FormControl('', [Validators.required, Validators.email]),
-  password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-  confirmPassword: new FormControl('', [Validators.required]),
-}, { validators: passwordMatchValidator });
+    showUsernameForm = false;
+    showEmailForm = false;
+    showPasswordForm = false;
 
-totalTours = 0;
-totalLogs = 0;
+    profileForm = new FormGroup({
+        username: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+        confirmPassword: new FormControl('', [Validators.required]),
+    }, { validators: passwordMatchValidator });
 
-ngOnInit(): void {
-  this.username = localStorage.getItem('username') ?? 'N/A';
-  this.email = localStorage.getItem('email') ?? 'N/A';
-}
+    get usernameControl() { return this.profileForm.get('username') as FormControl; }
+    get emailControl() { return this.profileForm.get('email') as FormControl; }
+    get passwordControl() { return this.profileForm.get('password') as FormControl; }
+    get confirmPasswordControl() { return this.profileForm.get('confirmPassword') as FormControl; }
 
-// add these getters to your component class
-get usernameControl() { return this.profileForm.get('username') as FormControl; }
-get emailControl() { return this.profileForm.get('email') as FormControl; }
-get passwordControl() { return this.profileForm.get('password') as FormControl; }
-get confirmPasswordControl() { return this.profileForm.get('confirmPassword') as FormControl; }
+    ngOnInit(): void {
+        this.authService.getProfile().subscribe({
+            next: (user) => {
+                this.username = user.username;
+                this.email = user.email;
+                this.totalTours = user.totalTours ?? 0;
+                localStorage.setItem('username', user.username);
+                localStorage.setItem('email', user.email);
+            },
+            error: () => {
+                this.username = localStorage.getItem('username') ?? 'N/A';
+                this.email = localStorage.getItem('email') ?? 'N/A';
+            }
+        });
+    }
 
-onSave(field: 'username' | 'email' | 'password'): void {
-  const control = this.profileForm.get(field);
-  if (control?.invalid) return;
+    onSave(field: 'username' | 'email' | 'password'): void {
+        const control = this.profileForm.get(field);
+        if (control?.invalid) return;
+        if (field === 'password' && this.profileForm.errors?.['mismatch']) return;
 
-  if (field === 'username') {
-    this.username = this.profileForm.value.username!;
-    localStorage.setItem('username', this.username);
-    this.showUsernameForm = false;
-  } else if (field === 'email') {
-    this.email = this.profileForm.value.email!;
-    localStorage.setItem('email', this.email);
-    this.showEmailForm = false;
-  } else if (field === 'password') {
-    if (this.profileForm.errors?.['mismatch']) return;
-    console.log('Password change requested');
-    this.profileForm.get('password')?.reset();
-    this.profileForm.get('confirmPassword')?.reset();
-    this.showPasswordForm = false;
-  }
-}
+        const payload: any = {};
+        if (field === 'username') payload.username = this.usernameControl.value;
+        if (field === 'email') payload.email = this.emailControl.value;
+        if (field === 'password') payload.password = this.passwordControl.value;
 
-onCancel(): void {
-  window.history.back();
-};
+        this.authService.updateProfile(payload).subscribe({
+            next: (user) => {
+                this.username = user.username;
+                this.email = user.email;
+                this.totalTours = user.totalTours ?? 0;
+                localStorage.setItem('username', user.username);
+                localStorage.setItem('email', user.email);
 
+                if (field === 'username') this.showUsernameForm = false;
+                if (field === 'email') this.showEmailForm = false;
+                if (field === 'password') {
+                    this.passwordControl.reset();
+                    this.confirmPasswordControl.reset();
+                    this.showPasswordForm = false;
+                }
+            },
+            error: (err) => console.error('Update failed', err)
+        });
+    }
+
+    onCancel(): void {
+        window.history.back();
+    }
 }

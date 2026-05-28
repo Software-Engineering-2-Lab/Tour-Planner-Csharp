@@ -43,6 +43,55 @@ namespace TourPlanner.backend.Controllers
             return Ok(new { message = "User registered successfully" });
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser([FromRoute] long id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(new UserProfileResponseDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                TotalTours = user.Tours?.Count ?? 0
+            });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] long id, [FromBody] UserUpdateDto dto)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            if (!string.IsNullOrWhiteSpace(dto.Username))
+                user.Username = dto.Username;
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+            {
+                var existing = await _userRepository.FindByEmailAsync(dto.Email);
+                if (existing != null && existing.Id != id)
+                    return BadRequest(new { message = "Email already in use" });
+                user.Email = dto.Email;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+                user.Password = _passwordHasher.HashPassword(user, dto.Password);
+
+            _userRepository.Update(user);
+            await _userRepository.SaveAsync();
+
+            return Ok(new UserProfileResponseDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                TotalTours = user.Tours?.Count ?? 0
+            });
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
@@ -84,7 +133,8 @@ namespace TourPlanner.backend.Controllers
             {
                 token = realToken,
                 userId = user.Id,
-                username = user.Username
+                username = user.Username,
+                email = user.Email 
             });
         }
     }

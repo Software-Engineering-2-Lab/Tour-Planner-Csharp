@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { TourService } from './tour.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
     private apiUrl = 'http://localhost:8080/api/auth';
     private tourService = inject(TourService);
@@ -30,19 +28,29 @@ export class AuthService {
     }
 
     saveToken(token: string) {
-    localStorage.setItem('token', token);
-    this._isLoggedIn.set(true); 
-}
+        localStorage.setItem('token', token);
+        this._isLoggedIn.set(true);
+    }
 
     logout() {
         localStorage.clear();
-        this.tourService.clearData(); 
-        this.router.navigate(['/login']); 
-        this._isLoggedIn.set(false); 
+        this.tourService.clearData();
+        this.router.navigate(['/login']);
+        this._isLoggedIn.set(false);
     }
 
     getUserId(): number {
         const id = localStorage.getItem('userId');
         return id ? parseInt(id, 10) : 0;
+    }
+
+    getProfile(): Observable<any> {
+        const userId = this.getUserId();
+        return this.http.get(`${this.apiUrl}/${userId}`);
+    }
+
+    updateProfile(data: { username?: string; email?: string; password?: string }): Observable<any> {
+        const userId = this.getUserId();
+        return this.http.put(`${this.apiUrl}/${userId}`, data);
     }
 }
