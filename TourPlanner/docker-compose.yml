@@ -11,12 +11,19 @@ services:
             - "5432:5432"
         volumes:
             - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U user -d tourplanner_db"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
     backend:
         build: ./backend
         container_name: tour-planner-be
+        restart: on-failure
         depends_on:
-            - db
+            db:
+                condition: service_healthy
         ports:
             - "8080:8080"
         volumes:

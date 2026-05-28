@@ -10,7 +10,6 @@ using TourPlanner.backend.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using TourPlanner.backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +69,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Controllers & OpenAPI (Păstrate doar o singură dată aici)
+// Controllers & OpenAPI
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
