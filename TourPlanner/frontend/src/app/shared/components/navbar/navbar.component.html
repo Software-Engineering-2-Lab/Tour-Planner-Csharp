@@ -2,6 +2,8 @@
     <div class="navbar-brand">
         <h1>TourPlanner</h1>
     </div>
+
+    <button class="btn-tours-toggle" (click)="toggleSidebar.emit()">☰ Tours</button>
     
     <div class="navbar-search">
         <input type="text" placeholder="Advanced search..." />
@@ -10,9 +12,17 @@
     <div class="navbar-actions">
         <button class="btn-primary" (click)="openAddTour()">+ New Tour</button>
         @if (isTourModalOpen()) {
-        <app-tour-modal (close)="closeTourModal()"></app-tour-modal>
+            <app-tour-modal (close)="closeTourModal()"></app-tour-modal>
         }   
-        <button class="btn-secondary" >Import</button>
+        <input 
+            type="file"
+            #fileInput
+            accept=".json"
+            multiple
+            style="display:none"
+            (change)="onImport($event)"
+        />
+        <button class="btn-secondary" (click)="fileInput.click()">Import</button>
         <button class="btn-icon" routerLink="/profile">
             <span>User</span>
         </button>

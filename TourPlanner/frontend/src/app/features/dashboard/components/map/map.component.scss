@@ -8,6 +8,8 @@
   border-radius: 10px;
   border: 1px solid #e5e7eb;
   overflow: hidden;
+  isolation: isolate;
+  z-index: 0;
 }
 
 .map-overlay {

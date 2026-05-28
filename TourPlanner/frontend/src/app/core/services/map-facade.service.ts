@@ -7,7 +7,6 @@ export interface RouteResult {
   durationMin: number;
 }
 
-// Simple dot marker - no images needed
 const DOT_ICON = L.divIcon({
   className: '',
   html: '<div style="width:10px;height:10px;border-radius:50%;background:#3b82f6;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',

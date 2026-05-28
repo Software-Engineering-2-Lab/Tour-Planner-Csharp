@@ -7,7 +7,7 @@ import { MapComponent } from '../map/map.component';
 import { LogModalComponent } from '../modals/log-modal/log-modal.component';
 import { TourModalComponent } from '../modals/tour-modal/tour-modal.component';
 import { TourPhotosComponent } from '../tour-photos/tour-photos.component';
-
+import { ExportImportService } from '../../../../core/services/export-import.service';
 type TourTab = 'details' | 'photos';
 
 @Component({
@@ -20,11 +20,11 @@ type TourTab = 'details' | 'photos';
 export class TourDetailComponent {
     private tourService = inject(TourService);
     private dialog = inject(MatDialog);
+    private exportImport = inject(ExportImportService);
 
     activeTab = signal<TourTab>('details');
     searchTerm = signal('');
     
-    // Label: Signals required by the HTML template for modal visibility
     isLogModalOpen = signal(false);
     isTourModalOpen = signal(false);
     selectedLogForEdit = signal<TourLog | undefined>(undefined);
@@ -46,7 +46,6 @@ export class TourDetailComponent {
         });
     });
 
-    // Label: Refresh logs from backend for the currently selected tour
     loadLogs(): void {
         const tour = this.selectedTour();
         if (tour) {
@@ -54,7 +53,6 @@ export class TourDetailComponent {
         }
     }
 
-    // Label: Handlers for Tour CRUD operations requested by the template
     openEditTour(): void {
         this.isTourModalOpen.set(true);
     }
@@ -66,7 +64,12 @@ export class TourDetailComponent {
         }
     }
 
-    // Label: Handlers for Log modal operations
+    onExport(): void {
+        const tour = this.selectedTour();
+        if (!tour) return;
+        this.exportImport.exportTour(tour);
+    }
+
     openLogModal(): void {
         this.selectedLogForEdit.set(undefined);
         this.isLogModalOpen.set(true);
@@ -109,10 +112,8 @@ export class TourDetailComponent {
         const currentTour = this.selectedTour();
         if (!currentTour) return;
 
-        // Creăm o listă nouă care conține și poza nouă
         const updatedImages = currentTour.tourImages ? [...currentTour.tourImages, newPhoto] : [newPhoto];
 
-        // Actualizăm Signal-ul cu noul obiect modificat
         this.selectedTour.set({
             ...currentTour,
             tourImages: updatedImages

@@ -11,10 +11,12 @@
     padding: 0 20px;
     background-color: #d6d6d6;
     border: 2px solid #000;
+    gap: 12px;
 
     .navbar-brand h1 {
         font-size: 1.5rem;
         margin: 0;
+        white-space: nowrap;
     }
 
     .navbar-search {
@@ -23,12 +25,14 @@
             width: 100%;
             padding: 8px 12px;
             border: 1px solid #000;
+            box-sizing: border-box;
         }
     }
 
     .navbar-actions {
         display: flex;
         gap: 10px;
+        align-items: center;
 
         button {
             padding: 6px 15px;
@@ -36,10 +40,63 @@
             background: #fff;
             cursor: pointer;
             font-weight: 500;
+            white-space: nowrap;
 
             &:hover {
                 background: #eee;
             }
         }
+    }
+
+    .btn-tours-toggle {
+        display: none; 
+        padding: 6px 12px;
+        border: 1px solid #000;
+        background: #fff;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        gap: 8px;
+
+        .navbar-brand h1 {
+            font-size: 1.1rem;
+        }
+
+        .navbar-search {
+            display: none;
+        }
+
+        .navbar-actions {
+            gap: 6px;
+
+            .btn-icon,
+            .btn-outline {
+                display: none;
+            }
+
+            button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        .btn-tours-toggle {
+            display: block;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar .navbar-actions .btn-secondary {
+        display: none;
     }
 }

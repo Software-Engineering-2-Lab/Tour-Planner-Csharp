@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Tour } from '../../../../core/models/tour.model';
 import { TourService } from '../../../../core/services/tour.service';
@@ -13,7 +13,7 @@ import { TourModalComponent } from '../modals/tour-modal/tour-modal.component';
 })
 export class TourListComponent {
     private tourService = inject(TourService);
-
+    tourSelected = output<void>()
     isTourModalOpen = signal(false);
     tourSearchTerm = signal('');
     

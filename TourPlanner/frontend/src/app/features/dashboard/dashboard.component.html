@@ -1,9 +1,13 @@
 <div class="dashboard-viewport">
-    <app-navbar></app-navbar>
+    <app-navbar (toggleSidebar)="sidebarOpen.set(!sidebarOpen())"></app-navbar>
 
     <div class="dashboard-body">
-        <aside class="sidebar-island">
-            <app-tour-list></app-tour-list>
+        @if (sidebarOpen()) {
+            <div class="sidebar-backdrop" (click)="sidebarOpen.set(false)"></div>
+        }
+
+        <aside class="sidebar-island" [class.open]="sidebarOpen()">
+            <app-tour-list (tourSelected)="sidebarOpen.set(false)"></app-tour-list>
         </aside>
 
         <main class="details-island">

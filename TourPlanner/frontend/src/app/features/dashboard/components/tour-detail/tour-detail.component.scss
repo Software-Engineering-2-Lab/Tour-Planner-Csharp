@@ -14,21 +14,22 @@
     gap: 28px;
 }
 
-// ── Map ──────────────────────────────────────────────────────────────────────
 .map-island {
     height: 300px;
     border: 1px solid #e0e0e0;
     background-color: #f7f7f7;
+    overflow: hidden;
+    flex-shrink: 0;
+    isolation: isolate;
+    z-index: 0;
 }
 
-// ── Content ──────────────────────────────────────────────────────────────────
 .detail-content {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-// ── Header ───────────────────────────────────────────────────────────────────
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -55,10 +56,10 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        flex-shrink: 0;
     }
 }
 
-// ── Shared button base ────────────────────────────────────────────────────────
 .btn-icon {
     padding: 7px 16px;
     border: 1px solid #0a0a0a;
@@ -77,7 +78,6 @@
     }
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────────────────
 .tabs-row {
     display: flex;
     gap: 0;
@@ -107,7 +107,6 @@
     }
 }
 
-// ── Stats grid ───────────────────────────────────────────────────────────────
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -143,7 +142,6 @@
     color: #ccc;
 }
 
-// ── Logs section ─────────────────────────────────────────────────────────────
 .logs-section {
     display: flex;
     flex-direction: column;
@@ -193,7 +191,6 @@
     }
 }
 
-// ── Logs table ───────────────────────────────────────────────────────────────
 .logs-table {
     display: flex;
     flex-direction: column;
@@ -271,7 +268,13 @@
     }
 }
 
-// ── Description ──────────────────────────────────────────────────────────────
+.no-data-message {
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.82rem;
+}
+
 .description-area {
     .section-label {
         font-size: 0.65rem;
@@ -291,5 +294,99 @@
         line-height: 1.7;
         font-size: 0.88rem;
         color: #333;
+    }
+}
+
+@media (max-width: 768px) {
+    .detail-container {
+        padding: 16px;
+        gap: 20px;
+    }
+
+    .map-island {
+        height: 200px;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .content-header {
+        flex-direction: column;
+        gap: 10px;
+
+        .title-info h2 {
+            font-size: 1.2rem;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: flex-start;
+
+            .btn-icon {
+                padding: 6px 10px;
+                font-size: 0.72rem;
+            }
+        }
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .logs-controls {
+        flex-wrap: wrap;
+
+        .log-search {
+            order: 3;
+            width: 100%;
+            flex: none;
+        }
+    }
+
+    .table-header {
+        display: none;
+    }
+
+    .table-row {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 12px 14px;
+        border-top: 1px solid #e0e0e0;
+        position: relative;
+
+        .col-date {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .col-desc {
+            font-size: 0.88rem;
+            white-space: normal; 
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        .col-stats {
+            flex-wrap: wrap;
+        }
+
+        .col-rating {
+            font-size: 0.82rem;
+        }
+
+        .col-actions {
+            justify-content: flex-start;
+            margin-top: 4px;
+        }
+    }
+
+    .tabs-row .tab-btn {
+        padding: 9px 16px;
     }
 }
