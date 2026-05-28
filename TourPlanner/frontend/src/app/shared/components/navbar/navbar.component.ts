@@ -35,13 +35,18 @@ export class NavbarComponent {
         this.isTourModalOpen.set(false);
     }
 
-    onImport(event : Event):void {
-        const files = (event.target as HTMLInputElement).files;
-        if (!files) return;
-        const userId = Number(localStorage.getItem('userId'));
-        console.log('userId:', userId);
-        this.exportImport.importTours(files, userId);
-    } 
+   onImport(event: Event): void {
+    const files = (event.target as HTMLInputElement).files;
+    if (!files) return;
+    const userId = Number(localStorage.getItem('userId'));
+    this.exportImport.importTours(files, userId).subscribe({
+        next: () => {
+            console.log('Import successful');
+            (event.target as HTMLInputElement).value = '';
+        },
+        error: (err) => console.error('Import failed', err)
+    });
+}
 
 
 }

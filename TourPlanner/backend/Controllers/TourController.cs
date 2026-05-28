@@ -26,6 +26,18 @@ namespace TourPlanner.backend.Controllers
             return CreatedAtAction(nameof(GetTourById), new { id = created.Id }, created);
         }
 
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportTours([FromBody] List<TourDto> tourDtos)
+        {
+            var created = new List<object>();
+            foreach (var dto in tourDtos)
+            {
+                var tour = await _tourService.CreateAsync(dto);
+                created.Add(tour);
+            }
+            return Ok(created);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTour([FromRoute] long id, [FromBody] TourDto tourDTO)
         {

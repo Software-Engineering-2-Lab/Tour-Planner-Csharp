@@ -119,4 +119,6 @@ export class TourDetailComponent {
             tourImages: updatedImages
         });
     }
+
+
 }
