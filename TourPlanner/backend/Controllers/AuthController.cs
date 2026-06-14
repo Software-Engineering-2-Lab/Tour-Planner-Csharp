@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using TourPlanner.backend.DTOs;
 using TourPlanner.backend.Entities;
 using TourPlanner.backend.Repositories;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourPlanner.backend.Controllers
 {
@@ -14,10 +17,13 @@ namespace TourPlanner.backend.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
 
-        public AuthController(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        private readonly IConfiguration _configuration;
+
+        public AuthController(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -43,6 +49,56 @@ namespace TourPlanner.backend.Controllers
             return Ok(new { message = "User registered successfully" });
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
+        {
+            var user = await _userRepository.FindByEmailAsync(dto.Email);
+            
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Invalid email or password" });
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return Unauthorized(new { message = "Invalid email or password" });
+            }
+
+            var claims = new System.Security.Claims.Claim[]
+            {
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, user.Username)
+            };
+
+            var jwtSecret = _configuration["JwtSettings:SecretKey"];
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
+            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            var realToken = tokenHandler.WriteToken(securityToken);
+
+            return Ok(new
+            {
+                token = realToken,
+                userId = user.Id,
+                username = user.Username,
+                email = user.Email 
+            });
+        }
+    
+        [Authorize]
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] long id)
         {
@@ -58,6 +114,8 @@ namespace TourPlanner.backend.Controllers
                 TotalTours = user.Tours?.Count ?? 0
             });
         }
+
+        [Authorize]
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([FromRoute] long id, [FromBody] UserUpdateDto dto)
@@ -91,58 +149,11 @@ namespace TourPlanner.backend.Controllers
                 TotalTours = user.Tours?.Count ?? 0
             });
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
-        {
-            var user = await _userRepository.FindByEmailAsync(dto.Email);
-            
-            if (user == null)
-            {
-                return Unauthorized(new { message = "Invalid email or password" });
-            }
-
-            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, dto.Password);
-
-            if (result == PasswordVerificationResult.Failed)
-            {
-                return Unauthorized(new { message = "Invalid email or password" });
-            }
-
-            var claims = new System.Security.Claims.Claim[]
-            {
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, user.Username)
-            };
-
-            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("ExtraMegaSuperSecureSecurityTokenKey"));
-            var creds = new Microsoft.IdentityModel.Tokens.SigningCredentials(key, Microsoft.IdentityModel.Tokens.SecurityAlgorithms.HmacSha256);
-
-            var tokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(claims),
-                Expires = System.DateTime.UtcNow.AddDays(7),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            var realToken = tokenHandler.WriteToken(securityToken);
-
-            return Ok(new
-            {
-                token = realToken,
-                userId = user.Id,
-                username = user.Username,
-                email = user.Email 
-            });
-        }
-    }
-
     // Un DTO mic pentru Login, deoarece C# preferă obiecte tipizate în loc de Map<string, string>
     public class LoginRequest
     {
         public required string Email { get; set; }
         public required string Password { get; set; }
     }
+}
 }

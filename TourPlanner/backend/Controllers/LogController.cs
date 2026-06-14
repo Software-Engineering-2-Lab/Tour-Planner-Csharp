@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TourPlanner.backend.DTOs;
 using TourPlanner.backend.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourPlanner.backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/tours")]
     public class LogController : ControllerBase

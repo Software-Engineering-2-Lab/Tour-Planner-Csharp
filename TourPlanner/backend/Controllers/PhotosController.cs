@@ -7,9 +7,11 @@ using TourPlanner.backend.Data;
 using TourPlanner.backend.Entities;
 using TourPlanner.backend.DTOs;
 using TourPlanner.backend.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourPlanner.backend.Controllers
 {
+    [Authorize]
     [ApiController]
     public class PhotosController : ControllerBase
     {
