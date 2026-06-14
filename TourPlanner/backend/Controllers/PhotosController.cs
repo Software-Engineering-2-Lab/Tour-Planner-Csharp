@@ -7,11 +7,9 @@ using TourPlanner.backend.Data;
 using TourPlanner.backend.Entities;
 using TourPlanner.backend.DTOs;
 using TourPlanner.backend.Services;
-using Microsoft.AspNetCore.Authorization;
-
 namespace TourPlanner.backend.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     public class PhotosController : ControllerBase
     {
@@ -24,7 +22,6 @@ namespace TourPlanner.backend.Controllers
             _storageService = storageService;
         }
 
-        [Authorize]
         [HttpPost("api/tours/{tourId}/photos")]
         public async Task<IActionResult> UploadPhoto(long tourId, IFormFile file)
         {
@@ -32,6 +29,21 @@ namespace TourPlanner.backend.Controllers
             if (string.IsNullOrEmpty(userIdClaim) || !long.TryParse(userIdClaim, out var userId))
             {
                 return Unauthorized();
+            }
+
+            long maxFileSizeInBytes= 5*1024*1024;
+
+            if (file.Length > maxFileSizeInBytes)
+            {
+                return BadRequest("File size exceeds the maximum allowed limit of 5 GB.");
+            }
+
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var extension = Path.GetExtension(file.FileName).ToLower(); 
+
+            if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
+            {
+                return BadRequest("Invalid file extension. Only JPG, JPEG, PNG are allowed.");
             }
 
             var tour = await _context.Tours.FirstOrDefaultAsync(t => t.Id == tourId);
@@ -106,7 +118,6 @@ namespace TourPlanner.backend.Controllers
             return PhysicalFile(photo.FilePath, contentType);
         }
 
-        [Authorize]
         [HttpDelete("api/tours/{tourId}/photos/{photoId}")]
         public async Task<IActionResult> DeletePhoto(long tourId, long photoId)
         {

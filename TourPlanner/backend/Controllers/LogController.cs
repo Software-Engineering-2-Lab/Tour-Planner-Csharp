@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TourPlanner.backend.Controllers
 {
-    [Authorize]
+   
     [ApiController]
     [Route("api/tours")]
     public class LogController : ControllerBase
