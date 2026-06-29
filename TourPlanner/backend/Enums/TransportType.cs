@@ -4,8 +4,8 @@ namespace TourPlanner.backend.Enums
     {
         BIKE,
         HIKE,
-        RUNNING,
+        WALK,
 
-        VACATION    
+        DRIVE    
     }
 }

@@ -22,12 +22,12 @@ export class TourModalComponent implements OnInit {
     description: string = '';
     fromLocation: string = '';
     toLocation: string = '';
-    transportType: 'BIKE' | 'HIKE' | 'RUNNING' | 'VACATION' = 'BIKE';
+    transportType: 'BIKE' | 'HIKE' | 'WALK' | 'DRIVE' = 'DRIVE';
 
     distance: number = 0;
     estimatedTime: number = 0;
 
-    setTransport(type: 'BIKE' | 'HIKE' | 'RUNNING' | 'VACATION'): void {
+    setTransport(type: 'BIKE' | 'HIKE' | 'WALK' | 'DRIVE'): void {
         this.transportType = type;
     }
 
