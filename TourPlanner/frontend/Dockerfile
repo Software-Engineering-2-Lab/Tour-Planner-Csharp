@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 4200
 
 # Start the Angular server with external access for Docker
-CMD ["npx", "ng", "serve", "--host", "0.0.0.0"]
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--poll", "2000"]

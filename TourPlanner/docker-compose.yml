@@ -27,6 +27,7 @@ services:
         ports:
             - "8080:8080"
         volumes:
+            - ./backend:/app
             - ./user_images:/app/Storage
             - ./logs:/app/logs
         environment:
@@ -39,6 +40,11 @@ services:
         container_name: tour-planner-fe
         ports:
             - "4200:4200"
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        environment:
+            - CHOKIDAR_USEPOLLING=true
 
 volumes:
     postgres_data:
