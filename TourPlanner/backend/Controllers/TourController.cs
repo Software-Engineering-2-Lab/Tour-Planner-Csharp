@@ -41,7 +41,7 @@ namespace TourPlanner.backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTour([FromRoute] long id, [FromBody] TourDto tourDTO)
+        public async Task<IActionResult> UpdateTour([FromRoute] long id, [FromBody] TourDto tourDTO)    
         {
             return Ok(await _tourService.UpdateAsync(id, tourDTO));
         }

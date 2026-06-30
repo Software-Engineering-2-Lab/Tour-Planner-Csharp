@@ -2,7 +2,6 @@ using TourPlanner.backend.Entities;
 using TourPlanner.backend.DTOs;
 using TourPlanner.backend.Repositories;
 using TourPlanner.backend.Enums;
-using Microsoft.OpenApi;
 
 
 namespace TourPlanner.backend.Services;
@@ -55,17 +54,34 @@ public class TourService : ITourService
     {
       throw new Exception("Tour not found.");
     }
-      existingTour.Name=dto.Name;
-      existingTour.Description=dto.Description;
+
+    bool locationChanged = dto.FromLocation != existingTour.FromLocation || dto.ToLocation != existingTour.ToLocation;
+
+    bool TransportTypeChanged = dto.TransportType != existingTour.TransportType;
+
+    if (locationChanged || TransportTypeChanged)
+    {
+      var (startLon,startLat) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
+
+      var (endLon, endLat) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
+      
+      var(distance,duration,geometry)= await _geocodingService.GetRouteAsync((startLon,startLat),(endLon, endLat),dto.TransportType);
+
+     
       existingTour.FromLocation=dto.FromLocation;
       existingTour.ToLocation=dto.ToLocation;
       existingTour.TransportType=dto.TransportType;
-      existingTour.Distance=dto.Distance;
-      existingTour.EstimatedTime=dto.EstimatedTime;
-      existingTour.RouteImagePath=dto.RouteImagePath;
-      existingTour.Popularity=dto.Popularity;
-      existingTour.ChildFriendliness=dto.ChildFriendliness;
-      existingTour.UserId=dto.UserId;
+      existingTour.Distance=distance;
+      existingTour.EstimatedTime=duration;
+      existingTour.RouteImagePath=geometry;
+      
+    }
+    
+    existingTour.Name=dto.Name;
+    existingTour.Description=dto.Description;
+    existingTour.Popularity=dto.Popularity;
+    existingTour.ChildFriendliness=dto.ChildFriendliness;
+    existingTour.UserId=dto.UserId;
     
     await _tourRepository.UpdateAsync(existingTour);
 
