@@ -15,25 +15,34 @@ public class GeocodingService : IGeocodingService
     _apiKey=configuration["OpenRouteService:ApiKey"] ?? throw new ArgumentNullException("ORS ApiKey is missing");
   }
 
-  public async Task<(double lon , double lat)> GetCoordinatesAsync (String address)
-  {
-    var url = $"https://api.openrouteservice.org/geocode/search?api_key={_apiKey}&text={Uri.EscapeDataString(address)}&size=1";
+  public async Task<(double lon, double lat, string officialName)> GetCoordinatesAsync(string address)
+    {
+        var url = $"https://api.openrouteservice.org/geocode/search?api_key={_apiKey}&text={Uri.EscapeDataString(address)}&size=1";
 
-    Log.Information("[DEBUG ORS] URL-ul generat este: {Url}", url);
+        Log.Information("[DEBUG ORS] URL-ul generat este: {Url}", url);
+            
+        var response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
         
-    var response = await _httpClient.GetAsync(url);
-    response.EnsureSuccessStatusCode();
+        var features = doc.RootElement.GetProperty("features");
+        if (features.GetArrayLength() == 0) throw new Exception($"Location '{address}' not found.");
 
-    var json = await response.Content.ReadAsStringAsync();
-    using var doc = JsonDocument.Parse(json);
-    
-    var features = doc.RootElement.GetProperty("features");
-    if (features.GetArrayLength() == 0) throw new Exception($"Location '{address}' not found.");
+        var feature = features[0];
+        var coordinates = feature.GetProperty("geometry").GetProperty("coordinates");
+        
+        // --- PARTEA NOUĂ: Extragem numele oficial din proprietatea "label" ---
+        string officialName = address; // valoare de rezervă
+        var properties = feature.GetProperty("properties");
+        if (properties.TryGetProperty("label", out var labelElement) && labelElement.ValueKind != System.Text.Json.JsonValueKind.Null)
+        {
+            officialName = labelElement.GetString() ?? address;
+        }
 
-    var coordinates = features[0].GetProperty("geometry").GetProperty("coordinates");
-    
-    return (coordinates[0].GetDouble(), coordinates[1].GetDouble());
-}
+        return (coordinates[0].GetDouble(), coordinates[1].GetDouble(), officialName);
+    }
 
 public async Task<(double distance , double duration , string geometry)> GetRouteAsync ((double lon , double lat)start , (double lon , double lat)end , TransportType transportType)
       {

@@ -1,11 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { RouteResult } from './map-facade.service';
 import { TourService } from './tour.service';
 
+export interface RoutePreviewResponse {
+    distanceKm: number;
+    durationMin: number;
+    resolvedFrom: string;
+    resolvedTo: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class RealRouteService {
-    constructor(private tourService: TourService) {}
+    constructor(private tourService: TourService, private http: HttpClient) {}
+
+    getRoutePreview(from: string, to: string, transport: string): Observable<RoutePreviewResponse> {
+        const url = `http://localhost:8080/api/tours/preview`; 
+        const params = { from, to, transportType: transport };
+        return this.http.get<RoutePreviewResponse>(url, { params });
+    }
 
     getRouteForSelectedTour(): Observable<RouteResult> {
         return new Observable(observer => {

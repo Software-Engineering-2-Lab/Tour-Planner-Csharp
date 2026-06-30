@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="form-group flex-1">
                     <label>FROM *</label>
-                    <input type="text" [(ngModel)]="fromLocation" placeholder="Start">
+                    <input type="text" [(ngModel)]="fromLocation" (ngModelChange)="onInputChange()" placeholder="Start">
                 </div>
                 <div class="form-group flex-1">
                     <label>TO *</label>
-                    <input type="text" [(ngModel)]="toLocation" placeholder="End">
+                    <input type="text" [(ngModel)]="toLocation" (ngModelChange)="onInputChange()" placeholder="End">
                 </div>
             </div>
 
@@ -33,19 +33,20 @@
             </div> 
 
             <div class="ors-section">
-                <label class="ors-label">AUTO-FILLED VIA OPENROUTESERVICE (read-only)</label>
-                <div class="row">
-                    <div class="info-box dashed">
-                        Distance : {{ distance }} km
+                <label class="ors-label">LOCATION PREVIEW (via OpenRouteService)</label>
+                <div class="info-box dashed" style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding: 15px;">
+                    <div>
+                        <strong>Identified From:</strong> {{ resolvedFromLocation || 'Waiting for input...' }}
                     </div>
-                    <div class="info-box dashed">
-                        Est. Time : {{ estimatedTime }}
+                    <div>
+                        <strong>Identified To:</strong> {{ resolvedToLocation || 'Waiting for input...' }}
+                    </div>
+                    
+                    <div *ngIf="distance && estimatedTime" style="margin-top: 5px; color: #4caf50; display: flex; gap: 20px;">
+                        <span><strong>Distance:</strong> {{ distance }} km</span>
+                        <span><strong>Est. Time ({{ transportType }}):</strong> {{ formatTime(estimatedTime) }}</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="map-preview dashed">
-                <span class="map-text">[ Map loads after From/To are entered ]</span>
             </div>
 
             <div class="form-group">

@@ -5,6 +5,12 @@ import { TourService } from '../../../../../core/services/tour.service';
 import { Tour, CreateTourDto } from '../../../../../core/models/tour.model';
 import { AuthService } from '../../../../../core/services/auth.service';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
+import { RealRouteService } from '../../../../../core/services/route.service';
+
 @Component({
     selector: 'app-tour-modal',
     standalone: true,
@@ -17,6 +23,7 @@ export class TourModalComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
     private authService = inject(AuthService);
+    private routeService = inject(RealRouteService);
 
     name: string = '';
     description: string = '';
@@ -27,8 +34,55 @@ export class TourModalComponent implements OnInit {
     distance: number = 0;
     estimatedTime: number = 0;
 
+    resolvedFromLocation: string = '';
+    resolvedToLocation: string = '';
+    
+    private inputSubject = new Subject<void>();
+
+    constructor(private tourService: TourService) {
+        this.inputSubject.pipe(
+            debounceTime(800),
+            takeUntilDestroyed()
+        ).subscribe(() => {
+            this.calculateRouteIfReady();
+        });
+    }
+
     setTransport(type: 'BIKE' | 'HIKE' | 'WALK' | 'DRIVE'): void {
         this.transportType = type;
+        this.inputSubject.next(); 
+    }
+
+    onInputChange(): void {
+        this.inputSubject.next(); 
+    }
+
+    private calculateRouteIfReady(): void {
+        if (this.fromLocation.trim() && this.toLocation.trim() && this.transportType) {
+
+            console.log('Fetching route for:', this.fromLocation, '->', this.toLocation, 'via', this.transportType);
+
+            this.routeService.getRoutePreview(this.fromLocation, this.toLocation, this.transportType)
+                .subscribe({
+                    next: (response) => {
+                        this.resolvedFromLocation = response.resolvedFrom;
+                        this.resolvedToLocation = response.resolvedTo;
+                        this.distance = response.distanceKm;
+                        this.estimatedTime = response.durationMin;
+                    },
+                    error: (err) => {
+                        console.error('Eroare la obținerea preview-ului rutei', err);
+                        this.resolvedFromLocation = 'Location not found / Error';
+                        this.resolvedToLocation = 'Location not found / Error';
+                    }
+                });
+
+        } else {
+            this.resolvedFromLocation = '';
+            this.resolvedToLocation = '';
+            this.distance = 0;
+            this.estimatedTime = 0;
+        }
     }
 
     onSave(): void {
@@ -73,8 +127,6 @@ export class TourModalComponent implements OnInit {
         this.close.emit();
     }
 
-    constructor(private tourService: TourService) {}
-
     ngOnInit(): void {
         if (this.editTour) {
             this.name = this.editTour.name;
@@ -89,5 +141,13 @@ export class TourModalComponent implements OnInit {
 
     onCancel(): void {
         this.close.emit();
+    }
+
+    formatTime(minutes: number): string {
+        const h = Math.floor(minutes / 60);
+        const m = Math.round(minutes % 60);
+        if (h === 0) return `${m} min`;
+        if (m === 0) return `${h}h`;
+        return `${h}h ${m} min`;
     }
 }

@@ -20,8 +20,8 @@ public class TourService : ITourService
   
    public async Task<TourDto> CreateAsync (TourDto dto)
   {
-    var (startLon,startLat) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
-    var (endLon, endLat) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
+    var (startLon,startLat, _) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
+    var (endLon, endLat, _) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
 
     var(distance,duration,geometry)= await _geocodingService.GetRouteAsync((startLon,startLat),(endLon, endLat),dto.TransportType);
 
@@ -61,9 +61,9 @@ public class TourService : ITourService
 
     if (locationChanged || TransportTypeChanged)
     {
-      var (startLon,startLat) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
+      var (startLon,startLat, _) = await _geocodingService.GetCoordinatesAsync(dto.FromLocation);
 
-      var (endLon, endLat) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
+      var (endLon, endLat, _) = await _geocodingService.GetCoordinatesAsync(dto.ToLocation);
       
       var(distance,duration,geometry)= await _geocodingService.GetRouteAsync((startLon,startLat),(endLon, endLat),dto.TransportType);
 

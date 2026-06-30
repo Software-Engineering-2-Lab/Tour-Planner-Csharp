@@ -45,6 +45,7 @@ export class TourPhotosComponent implements OnInit, OnChanges {
 
     onFileSelected(event: any): void {
         this.handleFiles(event.target.files);
+
     }
 
     onDragOver(event: DragEvent): void {
@@ -73,7 +74,12 @@ export class TourPhotosComponent implements OnInit, OnChanges {
         if (!this.tourId) return;
 
         Array.from(files).forEach(file => {
-            if (!file.type.startsWith('image/')) return;
+
+            if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+                alert('Invalid format. Only .png and .jpg/.jpeg files accepted');
+                console.log('Upload blocat: format fișier neacceptat -', file.type);
+                return;
+            }
 
             this.photoService.uploadPhoto(this.tourId!, file).subscribe({
                 next: (savedImage: TourImageDto) => {
