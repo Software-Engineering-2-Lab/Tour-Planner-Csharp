@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { TourService } from '../../../core/services/tour.service';
@@ -11,122 +11,123 @@ import { ExportImportService } from '../../../core/services/export-import.servic
 type TourTab = 'details' | 'photos';
 
 @Component({
-    selector: 'app-tour-detail',
-    standalone: true,
-    imports: [CommonModule, MapComponent, LogModalComponent, TourModalComponent, TourPhotosComponent],
-    templateUrl: './tour-detail.component.html',
-    styleUrl: './tour-detail.component.scss'
+  selector: 'app-tour-detail',
+  standalone: true,
+  imports: [CommonModule, MapComponent, LogModalComponent, TourModalComponent, TourPhotosComponent],
+  templateUrl: './tour-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './tour-detail.component.scss',
 })
 export class TourDetailComponent {
-    private tourService = inject(TourService);
-    private dialog = inject(MatDialog);
-    private exportImport = inject(ExportImportService);
+  private tourService = inject(TourService);
+  private dialog = inject(MatDialog);
+  private exportImport = inject(ExportImportService);
 
-    activeTab = signal<TourTab>('details');
-    searchTerm = signal('');
-    
-    isLogModalOpen = signal(false);
-    isTourModalOpen = signal(false);
-    selectedLogForEdit = signal<TourLog | undefined>(undefined);
+  activeTab = signal<TourTab>('details');
+  searchTerm = signal('');
 
-    selectedTour = this.tourService.selectedTour;
+  isLogModalOpen = signal(false);
+  isTourModalOpen = signal(false);
+  selectedLogForEdit = signal<TourLog | undefined>(undefined);
 
-    filteredLogs = computed(() => {
-        const term = this.searchTerm().toLowerCase();
-        const logs = this.tourService.selectedTourLogs();
+  selectedTour = this.tourService.selectedTour;
 
-        if (!term) return logs;
+  filteredLogs = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    const logs = this.tourService.selectedTourLogs();
 
-        return logs.filter(log => {
-            const commentMatch = log.comment.toLowerCase().includes(term);
-            const dateObj = new Date(log.dateTime);
-            const visualDate = `${String(dateObj.getDate()).padStart(2, '0')}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getFullYear()).slice(-2)}`;
-            
-            return commentMatch || visualDate.includes(term) || log.dateTime.includes(term);
-        });
+    if (!term) return logs;
+
+    return logs.filter((log) => {
+      const commentMatch = log.comment.toLowerCase().includes(term);
+      const dateObj = new Date(log.dateTime);
+      const visualDate = `${String(dateObj.getDate()).padStart(2, '0')}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getFullYear()).slice(-2)}`;
+
+      return commentMatch || visualDate.includes(term) || log.dateTime.includes(term);
     });
+  });
 
-    loadLogs(): void {
-        const tour = this.selectedTour();
-        if (tour) {
-            this.tourService.loadLogsForTour(tour.id);
-        }
+  loadLogs(): void {
+    const tour = this.selectedTour();
+    if (tour) {
+      this.tourService.loadLogsForTour(tour.id);
     }
+  }
 
-    openEditTour(): void {
-        this.isTourModalOpen.set(true);
+  openEditTour(): void {
+    this.isTourModalOpen.set(true);
+  }
+
+  onDeleteTour(): void {
+    const tour = this.selectedTour();
+    if (tour && confirm('Permanently delete this tour and all its logs?')) {
+      this.tourService.deleteTour(tour.id);
     }
+  }
 
-    onDeleteTour(): void {
-        const tour = this.selectedTour();
-        if (tour && confirm('Permanently delete this tour and all its logs?')) {
-            this.tourService.deleteTour(tour.id);
-        }
+  onExport(): void {
+    const tour = this.selectedTour();
+    if (!tour) return;
+    this.exportImport.exportTour(tour);
+  }
+
+  openLogModal(): void {
+    this.selectedLogForEdit.set(undefined);
+    this.isLogModalOpen.set(true);
+  }
+
+  openEditLog(log: TourLog): void {
+    this.selectedLogForEdit.set(log);
+    this.isLogModalOpen.set(true);
+  }
+
+  closeLogModal(): void {
+    this.isLogModalOpen.set(false);
+    this.selectedLogForEdit.set(undefined);
+    this.loadLogs();
+  }
+
+  onDeleteLog(logId: number): void {
+    const tour = this.selectedTour();
+    if (tour && confirm('Are you sure you want to delete this log?')) {
+      this.tourService.deleteLog(logId, tour.id);
     }
+  }
 
-    onExport(): void {
-        const tour = this.selectedTour();
-        if (!tour) return;
-        this.exportImport.exportTour(tour);
-    }
+  setActiveTab(tab: TourTab): void {
+    this.activeTab.set(tab);
+  }
 
-    openLogModal(): void {
-        this.selectedLogForEdit.set(undefined);
-        this.isLogModalOpen.set(true);
-    }
+  onSearchChange(event: Event): void {
+    this.searchTerm.set((event.target as HTMLInputElement).value);
+  }
 
-    openEditLog(log: TourLog): void {
-        this.selectedLogForEdit.set(log);
-        this.isLogModalOpen.set(true);
-    }
+  getFriendlyLabel(value: number | undefined): string {
+    if (value === undefined) return 'MEDIUM';
+    if (value >= 8) return 'HARD';
+    if (value >= 5) return 'MEDIUM';
+    return 'EASY';
+  }
 
-    closeLogModal(): void {
-        this.isLogModalOpen.set(false);
-        this.selectedLogForEdit.set(undefined);
-        this.loadLogs();
-    }
+  formatTime(minutes: number): string {
+    const h = Math.floor(minutes / 60);
+    const m = Math.round(minutes % 60);
+    if (h === 0) return `${m} min`;
+    if (m === 0) return `${h}h`;
+    return `${h}h ${m} min`;
+  }
 
-    onDeleteLog(logId: number): void {
-        const tour = this.selectedTour();
-        if (tour && confirm('Are you sure you want to delete this log?')) {
-            this.tourService.deleteLog(logId, tour.id);
-        }
-    }
+  onLocalPhotoAdded(newPhoto: any): void {
+    const currentTour = this.selectedTour();
+    if (!currentTour) return;
 
-    setActiveTab(tab: TourTab): void {
-        this.activeTab.set(tab);
-    }
+    const updatedImages = currentTour.tourImages
+      ? [...currentTour.tourImages, newPhoto]
+      : [newPhoto];
 
-    onSearchChange(event: Event): void {
-        this.searchTerm.set((event.target as HTMLInputElement).value);
-    }
-
-    getFriendlyLabel(value: number | undefined): string {
-        if (value === undefined) return 'MEDIUM';
-        if (value >= 8) return 'HARD';
-        if (value >= 5) return 'MEDIUM';
-        return 'EASY';
-    }
-
-    formatTime(minutes: number): string {
-        const h = Math.floor(minutes / 60);
-        const m = Math.round(minutes % 60);
-        if (h === 0) return `${m} min`;
-        if (m === 0) return `${h}h`;
-        return `${h}h ${m} min`;
-    }
-
-    onLocalPhotoAdded(newPhoto: any): void {
-        const currentTour = this.selectedTour();
-        if (!currentTour) return;
-
-        const updatedImages = currentTour.tourImages ? [...currentTour.tourImages, newPhoto] : [newPhoto];
-
-        this.selectedTour.set({
-            ...currentTour,
-            tourImages: updatedImages
-        });
-    }
-
-
+    this.selectedTour.set({
+      ...currentTour,
+      tourImages: updatedImages,
+    });
+  }
 }
