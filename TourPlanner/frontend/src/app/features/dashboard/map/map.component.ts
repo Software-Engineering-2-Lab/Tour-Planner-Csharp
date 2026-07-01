@@ -7,9 +7,9 @@ import {
     effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MapFacadeService } from '../../../../core/services/map-facade.service';
-import { RealRouteService } from '../../../../core/services/route.service';
-import { TourService } from '../../../../core/services/tour.service';
+import { MapFacadeService } from '../../../core/services/map-facade.service';
+import { RealRouteService } from '../../../core/services/route.service';
+import { TourService } from '../../../core/services/tour.service';
 
 @Component({
     selector: 'app-map',

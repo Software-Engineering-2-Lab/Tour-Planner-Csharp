@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PhotoService, TourImageDto } from '../../../../core/services/photos.service';
+import { PhotoService, TourImageDto } from '../../../core/services/photos.service';
 
 @Component({
     selector: 'app-tour-photos',

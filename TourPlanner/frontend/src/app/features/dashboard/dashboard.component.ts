@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
-import { TourListComponent } from './components/tour-list/tour-list.component';
-import { TourDetailComponent } from './components/tour-detail/tour-detail.component';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { TourListComponent } from './tour-list/tour-list.component';
+import { TourDetailComponent } from './tour-detail/tour-detail.component';
 
 @Component({
     selector: 'app-dashboard',

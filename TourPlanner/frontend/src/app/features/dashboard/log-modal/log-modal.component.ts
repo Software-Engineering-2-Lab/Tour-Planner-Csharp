@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TourService } from '../../../../../core/services/tour.service';
-import { TourLog } from '../../../../../core/models/tour-log.model';
+import { TourService } from '../../../core/services/tour.service';
+import { TourLog } from '../../../core/models/tour-log.model';
 
 
 @Component({

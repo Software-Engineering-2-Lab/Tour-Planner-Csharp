@@ -1,8 +1,8 @@
 import { Component, inject, signal, output } from '@angular/core';
 import { RouterModule, Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { TourModalComponent } from '../../../features/dashboard/components/modals/tour-modal/tour-modal.component';
-import {ExportImportService} from '../../../core/services/export-import.service'
+import { AuthService } from '../../core/services/auth.service';
+import { TourModalComponent } from '../../features/dashboard/tour-modal/tour-modal.component';
+import {ExportImportService} from '../../core/services/export-import.service'
 
 @Component({
     selector: 'app-navbar',

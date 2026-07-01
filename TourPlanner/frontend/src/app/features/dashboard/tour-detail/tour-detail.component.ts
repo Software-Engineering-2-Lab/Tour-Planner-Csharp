@@ -1,13 +1,13 @@
 import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { TourService } from '../../../../core/services/tour.service';
-import { TourLog } from '../../../../core/models/tour-log.model';
+import { TourService } from '../../../core/services/tour.service';
+import { TourLog } from '../../../core/models/tour-log.model';
 import { MapComponent } from '../map/map.component';
-import { LogModalComponent } from '../modals/log-modal/log-modal.component';
-import { TourModalComponent } from '../modals/tour-modal/tour-modal.component';
+import { LogModalComponent } from '../log-modal/log-modal.component';
+import { TourModalComponent } from '../tour-modal/tour-modal.component';
 import { TourPhotosComponent } from '../tour-photos/tour-photos.component';
-import { ExportImportService } from '../../../../core/services/export-import.service';
+import { ExportImportService } from '../../../core/services/export-import.service';
 type TourTab = 'details' | 'photos';
 
 @Component({

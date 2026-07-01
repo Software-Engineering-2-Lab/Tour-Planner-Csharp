@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { TourService } from '../../../core/services/tour.service';
+import { AuthService } from '../../core/services/auth.service';
+import { TourService } from '../../core/services/tour.service';
 
 @Component({
     selector: 'app-login',

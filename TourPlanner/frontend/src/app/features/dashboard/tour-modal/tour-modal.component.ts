@@ -1,15 +1,15 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TourService } from '../../../../../core/services/tour.service';
-import { Tour, CreateTourDto } from '../../../../../core/models/tour.model';
-import { AuthService } from '../../../../../core/services/auth.service';
+import { TourService } from '../../../core/services/tour.service';
+import { Tour, CreateTourDto } from '../../../core/models/tour.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { RealRouteService } from '../../../../../core/services/route.service';
+import { RealRouteService } from '../../../core/services/route.service';
 
 @Component({
     selector: 'app-tour-modal',

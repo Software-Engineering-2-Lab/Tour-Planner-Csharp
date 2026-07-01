@@ -1,8 +1,8 @@
 import { Component, signal, computed, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Tour } from '../../../../core/models/tour.model';
-import { TourService } from '../../../../core/services/tour.service';
-import { TourModalComponent } from '../modals/tour-modal/tour-modal.component';
+import { Tour } from '../../../core/models/tour.model';
+import { TourService } from '../../../core/services/tour.service';
+import { TourModalComponent } from '../tour-modal/tour-modal.component';
 
 @Component({
     selector: 'app-tour-list',
