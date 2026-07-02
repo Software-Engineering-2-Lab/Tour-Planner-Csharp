@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { RouteResult } from './map-facade.service';
 import { TourService } from './tour.service';
+import { environment } from '../../../environments/environment';
 
 export interface RoutePreviewResponse {
     distanceKm: number;
@@ -16,7 +17,7 @@ export class RealRouteService {
     constructor(private tourService: TourService, private http: HttpClient) {}
 
     getRoutePreview(from: string, to: string, transport: string): Observable<RoutePreviewResponse> {
-        const url = `http://localhost:8080/api/tours/preview`; 
+        const url = environment.apiUrl + '/tours/preview';
         const params = { from, to, transportType: transport };
         return this.http.get<RoutePreviewResponse>(url, { params });
     }

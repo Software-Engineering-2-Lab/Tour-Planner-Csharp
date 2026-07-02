@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface TourImageDto {
     id: number;
@@ -14,7 +15,7 @@ export interface TourImageDto {
     providedIn: 'root'
 })
 export class PhotoService {
-    private baseUrl = 'http://localhost:8080/api/tours';
+    private baseUrl = environment.apiUrl + '/tours';
 
     constructor(private http: HttpClient) {}
 

@@ -2,12 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { TourService } from './tour.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ExportImportService {
     private http = inject(HttpClient);
     private tourService = inject(TourService);
-    private readonly API = 'http://localhost:8080/api/tours';
+    private readonly API = environment.apiUrl + '/tours';
 
     exportTour(tour: any): void {
         const json = JSON.stringify(tour, null, 2);

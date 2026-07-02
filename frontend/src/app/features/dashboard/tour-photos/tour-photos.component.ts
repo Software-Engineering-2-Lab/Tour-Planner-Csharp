@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PhotoService, TourImageDto } from '../../../core/services/photos.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-tour-photos',
@@ -26,6 +27,8 @@ export class TourPhotosComponent implements OnInit, OnChanges {
   @Output() photoAdded = new EventEmitter<TourImageDto>();
   uploadedPhotos: { id?: number; url: string; fileName: string; createdAt: string }[] = [];
   isDragging = false;
+
+  public serverUrl = environment.serverUrl;
 
   constructor(
     private photoService: PhotoService,
