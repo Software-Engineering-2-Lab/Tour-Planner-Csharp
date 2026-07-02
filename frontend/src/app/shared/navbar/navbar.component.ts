@@ -1,20 +1,28 @@
 import { Component, inject, signal, output, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule, Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { TourModalComponent } from '../../features/dashboard/tour-modal/tour-modal.component';
 import { ExportImportService } from '../../core/services/export-import.service';
+import { SearchService } from '../../core/services/search.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, RouterLink, TourModalComponent],
+  imports: [RouterModule, RouterLink, TourModalComponent, FormsModule],
   templateUrl: './navbar.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
+  private searchService = inject(SearchService);
   private exportImport = inject(ExportImportService);
   isTourModalOpen = signal(false);
+
+  public localSearchTerm = '';
+  public onSearchChange(newTerm: string) {
+      this.searchService.updateSearch(newTerm);
+  }
 
   toggleSidebar = output<void>();
   constructor(

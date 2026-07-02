@@ -6,7 +6,10 @@
     <button class="btn-tours-toggle" (click)="toggleSidebar.emit()">☰ Tours</button>
     
     <div class="navbar-search">
-        <input type="text" placeholder="Advanced search..." />
+        <input type="text" 
+        [(ngModel)]="localSearchTerm" 
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Advanced search..." />
     </div>
 
     <div class="navbar-actions">

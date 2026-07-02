@@ -10,16 +10,19 @@ import { CommonModule } from '@angular/common';
 import { Tour } from '../../../core/models/tour.model';
 import { TourService } from '../../../core/services/tour.service';
 import { TourModalComponent } from '../tour-modal/tour-modal.component';
+import { HighlightPipe } from '../../../shared/pipes/highlight-pipe';
+import { SearchService } from '../../../core/services/search.service';
 
 @Component({
   selector: 'app-tour-list',
   standalone: true,
-  imports: [CommonModule, TourModalComponent],
+  imports: [CommonModule, TourModalComponent, HighlightPipe],
   templateUrl: './tour-list.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tour-list.component.scss',
 })
 export class TourListComponent {
+  public searchService = inject(SearchService);
   private tourService = inject(TourService);
   tourSelected = output<void>();
   isTourModalOpen = signal(false);

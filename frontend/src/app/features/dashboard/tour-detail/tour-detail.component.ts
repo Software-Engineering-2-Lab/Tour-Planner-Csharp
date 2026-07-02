@@ -8,17 +8,21 @@ import { LogModalComponent } from '../log-modal/log-modal.component';
 import { TourModalComponent } from '../tour-modal/tour-modal.component';
 import { TourPhotosComponent } from '../tour-photos/tour-photos.component';
 import { ExportImportService } from '../../../core/services/export-import.service';
+import { HighlightPipe } from '../../../shared/pipes/highlight-pipe';
+import { SearchService } from '../../../core/services/search.service';
+
 type TourTab = 'details' | 'photos';
 
 @Component({
   selector: 'app-tour-detail',
   standalone: true,
-  imports: [CommonModule, MapComponent, LogModalComponent, TourModalComponent, TourPhotosComponent],
+  imports: [CommonModule, MapComponent, LogModalComponent, TourModalComponent, TourPhotosComponent, HighlightPipe],
   templateUrl: './tour-detail.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tour-detail.component.scss',
 })
 export class TourDetailComponent {
+    public searchService = inject(SearchService);
   private tourService = inject(TourService);
   private dialog = inject(MatDialog);
   private exportImport = inject(ExportImportService);

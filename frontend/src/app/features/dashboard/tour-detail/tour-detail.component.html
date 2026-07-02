@@ -10,10 +10,13 @@
   <div class="detail-content">
     <header class="content-header">
       <div class="title-info">
-        <h2>{{ selectedTour()?.name }}</h2>
-        <span class="subtitle"
-          >{{ selectedTour()?.fromLocation }} ➔ {{ selectedTour()?.toLocation }}</span
-        >
+        <h2 [innerHTML]="selectedTour()?.name | highlight: searchService.searchTerm()"></h2>
+        
+        <span class="subtitle">
+          <span [innerHTML]="selectedTour()?.fromLocation | highlight: searchService.searchTerm()"></span>
+          &#10230;
+          <span [innerHTML]="selectedTour()?.toLocation | highlight: searchService.searchTerm()"></span>
+        </span>
       </div>
       <div class="header-actions">
         <button class="btn-icon" (click)="openEditTour()">&#9998; Edit</button>
@@ -98,7 +101,9 @@
           @for (log of filteredLogs(); track log.id) {
             <div class="table-row">
               <span class="col-date">{{ log.dateTime | date: 'dd.MM.yy' }}</span>
-              <span class="col-desc" [title]="log.comment">{{ log.comment }}</span>
+              <span class="col-desc" [title]="log.comment" 
+              [innerHTML]="log.comment | highlight: searchService.searchTerm()"> 
+              </span>
 
               <span class="col-stats">
                 <span class="badge diff">{{ log.difficulty }}</span> /
@@ -121,8 +126,7 @@
 
       <div class="description-area">
         <label class="section-label">DESCRIPTION</label>
-        <div class="text-box">
-          {{ selectedTour()?.description }}
+        <div class="text-box" [innerHTML]="selectedTour()?.description | highlight: searchService.searchTerm()">
         </div>
       </div>
     }
