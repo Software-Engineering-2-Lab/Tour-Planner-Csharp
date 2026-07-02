@@ -34,7 +34,7 @@ services:
             - ./user_images:/app/Storage
             - ./logs:/app/logs
         environment:
-            - ConnectionStrings__DefaultConnection=Host=db;Database=tourplanner_db;Username=${DB_USER};Password=${DB_PASSWORD}
+            - ConnectionStrings__DefaultConnection=Host=tour-planner-db;Database=tourplanner_db;Username=${DB_USER};Password=${DB_PASSWORD}
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_HTTP_PORTS=8080
 
