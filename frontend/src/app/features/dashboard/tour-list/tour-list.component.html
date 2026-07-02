@@ -16,7 +16,7 @@
                 <li (click)="selectTour(tour); tourSelected.emit()" 
                     [class.active]="tour.id === selectedTour()?.id"
                     class="tour-item">
-                    <span class="tour-name">{{ tour.name }}</span>
+                    <span class="tour-name" [innerHTML]="tour.name | highlight: searchService.searchTerm()"></span>
                 </li>
             } @empty {
                 <li class="no-tours">No tours found.</li>
