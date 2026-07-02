@@ -27,3 +27,8 @@ TourPlanner/user_images/*
 # Log files
 **/logs/
 *.txt
+
+# Node & Angular Frontend
+**/node_modules/
+**/dist/
+**/.angular/
