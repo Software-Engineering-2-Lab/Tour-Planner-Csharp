@@ -102,11 +102,15 @@ export class TourDetailComponent {
     this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
-  getFriendlyLabel(value: number | undefined): string {
-    if (value === undefined) return 'MEDIUM';
-    if (value >= 8) return 'HARD';
-    if (value >= 5) return 'MEDIUM';
-    return 'EASY';
+  getFriendlyLabel(value: number | undefined | null): string {
+    if (value === undefined || value === null || value === 0) return 'UNKNOWN';
+    
+    if (value = 1) return 'VERY EASY';
+    if (value = 2) return 'EASY';
+    if (value = 3) return 'MEDIUM';
+    if (value = 4) return 'HARD';
+    
+    return 'VERY HARD'; 
   }
 
   formatTime(minutes: number): string {

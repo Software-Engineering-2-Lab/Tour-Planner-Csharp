@@ -9,11 +9,13 @@ namespace TourPlanner.backend.Services;
 public class TourService : ITourService 
 {
    private readonly ITourRepository _tourRepository;
+   private readonly ILogRepository _logRepository;
    private readonly IGeocodingService _geocodingService;
 
-   public TourService (IGeocodingService geocodingService ,ITourRepository tourRepository)
+   public TourService (IGeocodingService geocodingService ,ITourRepository tourRepository,ILogRepository logRepository)
   {
     _tourRepository=tourRepository;
+    _logRepository=logRepository;
     _geocodingService=geocodingService;
   }
 
@@ -110,7 +112,7 @@ public class TourService : ITourService
       EstimatedTime=tour.EstimatedTime,
       RouteImagePath=tour.RouteImagePath,
       Popularity=tour.Popularity??0,
-      ChildFriendliness=tour.ChildFriendliness??0.0,
+      ChildFriendliness=tour.ChildFriendliness??0,
       UserId=tour.UserId,
       TourImages = tour.TourImages?.Select(img => new TourImageDto
             {
@@ -150,4 +152,68 @@ public class TourService : ITourService
         SearchQuery = query
     };
   }
+
+  public async Task CalculatesPopularityAsync(long tourId)
+  {
+    int logsCount= await _logRepository.GetTourLogsCountAsync(tourId);
+
+    int popularityScore;
+
+    switch (logsCount)
+    {
+        case 0:
+            popularityScore = 0; 
+            break;
+        case 1:
+            popularityScore = 1; 
+            break;
+        case 2:
+            popularityScore = 2;
+            break;
+        case 3:
+            popularityScore = 3;
+            break;
+        case 4:
+            popularityScore = 4;
+            break;
+        case 5:
+            popularityScore = 5; 
+            break;
+
+        default:
+            popularityScore = 5; 
+            break;
+    }
+
+    await _tourRepository.SetPopularityAsync(tourId,popularityScore);
+    
+  }
+
+  public async Task CalculatesChildFriendlinessAsync(long tourId)
+{
+    var logs = await _logRepository.FindByTourIdAsync(tourId);
+
+    if (logs == null)
+    {
+        await _tourRepository.SetChildFriendlinessAsync(tourId, 0);
+        return;
+    }
+
+    double averageDifficulty = logs.Average(log => log.Difficulty);
+
+    int childFriendlinessScore = 0;
+
+    if (averageDifficulty <= 1.5) 
+        childFriendlinessScore = 1; 
+    else if (averageDifficulty <= 2.5) 
+        childFriendlinessScore = 2;
+    else if (averageDifficulty <= 3.5) 
+        childFriendlinessScore = 3;
+    else if (averageDifficulty <= 4.5) 
+        childFriendlinessScore = 4;
+    else 
+        childFriendlinessScore = 5; 
+    await _tourRepository.SetChildFriendlinessAsync(tourId, childFriendlinessScore);
+}
+  
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TourPlanner.backend.Data; // Unde ai definit DbContext-ul
 using TourPlanner.backend.Entities;
 
+
 namespace TourPlanner.backend.Repositories
 {
     public class TourRepository : ITourRepository
@@ -79,7 +80,29 @@ namespace TourPlanner.backend.Repositories
         {
                 _context.Tours.Remove(tour); 
                 await _context.SaveChangesAsync();
+        }
+
+        public async Task SetPopularityAsync (long tourId, int valuePopularity)
+        {
+            var tour = await GetByIdAsync(tourId);
+
+            if (tour != null)
+            {
+                tour.Popularity=valuePopularity;
+
+                await _context.SaveChangesAsync();
             }
+            
+        }
+
+        public async Task SetChildFriendlinessAsync(long tourId, int childFriendlinessValue){
+            var tour = await _context.Tours.FindAsync(tourId);
+            if (tour != null)
+            {
+                tour.ChildFriendliness = childFriendlinessValue;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
     

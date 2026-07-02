@@ -10,5 +10,7 @@ namespace TourPlanner.backend.Services
         Task<TourDto> UpdateAsync(long id, TourDto tourDTO);
         Task DeleteAsync(long id);
         Task<SearchResultDto> SearchAsync(string query);
+        Task CalculatesPopularityAsync (long tourId);
+        Task CalculatesChildFriendlinessAsync(long tourId);
     }
 }

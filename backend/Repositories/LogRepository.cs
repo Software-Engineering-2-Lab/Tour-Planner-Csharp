@@ -56,6 +56,13 @@ namespace TourPlanner.backend.Repositories
         {
                 _context.Logs.Remove(log); 
                 await _context.SaveChangesAsync();
-            }
+        }
+
+        public async Task<int> GetTourLogsCountAsync(long tourId)
+        {
+            int logsCount =await _context.Logs.Where(log=> log.TourId==tourId).CountAsync();
+                                                
+            return logsCount;
+        }
     }
 }

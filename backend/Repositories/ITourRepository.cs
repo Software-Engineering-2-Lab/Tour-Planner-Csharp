@@ -14,5 +14,8 @@ namespace TourPlanner.backend.Repositories
         Task<Tour?> GetByIdAsync (long id);
         Task<Tour> UpdateAsync (Tour tour);
         Task DeleteAsync (Tour tour);
+        Task SetPopularityAsync (long tourId, int valuePopularity);
+        Task SetChildFriendlinessAsync(long tourId, int childFriendlinessValue);
+
     }
 }

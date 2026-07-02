@@ -18,7 +18,7 @@ namespace TourPlanner.backend.DTOs{
           public double EstimatedTime { get; set; }
           public string? RouteImagePath { get; set; }
           public int Popularity { get; set; }
-          public double ChildFriendliness { get; set; }
+          public int ChildFriendliness { get; set; }
           public long UserId { get; set; }
 
           public List<TourImageDto> TourImages { get; set; } = new();

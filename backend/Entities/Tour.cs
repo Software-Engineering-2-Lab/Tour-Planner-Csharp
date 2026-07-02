@@ -49,7 +49,7 @@ namespace TourPlanner.backend.Entities
         public int? Popularity { get; set; }
 
         [Column("child_friendliness")]
-        public double? ChildFriendliness { get; set; }
+        public int? ChildFriendliness { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }

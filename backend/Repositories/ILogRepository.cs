@@ -12,6 +12,10 @@ namespace TourPlanner.backend.Repositories
         Task<Log?> GetByIdAsync (long id);
         Task<Log> UpdateAsync (Log log);
         Task DeleteAsync (Log log);
+        Task<int> GetTourLogsCountAsync (long tourId);
+       
+
+
         
     }
 }
